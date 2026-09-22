@@ -6,10 +6,10 @@
 <title>Fresher Job Radar</title>
 <style>
 :root{
-  --bg:#0b1020; --surface:#141b2e; --surface2:#0e1425;
-  --line:#232d47; --line-hi:#33406a;
-  --text:#e8ecf7; --muted:#9aa5c3;
-  --primary:#4f8cff; --accent:#f7b32b; --ok:#3ecf8e; --warn:#ffb84d;
+  --bg:#f4f6fb; --surface:#ffffff; --surface2:#eef1f8;
+  --line:#dde3f0; --line-hi:#b9c4dc;
+  --text:#1a2333; --muted:#5b6780;
+  --primary:#2563eb; --accent:#b45309; --ok:#047857; --warn:#b45309;
   --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-6:24px; --sp-8:32px;
   --fs-12:12px; --fs-14:14px; --fs-16:16px; --fs-20:20px; --fs-28:28px;
   --rad:12px; --rad-s:8px;
@@ -37,29 +37,29 @@ input:hover,select:hover{border-color:var(--line-hi)}
 .result-line{font-size:var(--fs-12);color:var(--muted);margin:0 0 var(--sp-3)}
 .jobs{display:grid;gap:var(--sp-3)}
 .job{background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:var(--sp-4);transition:border-color .15s,box-shadow .15s}
-.job:hover{border-color:var(--line-hi);box-shadow:0 4px 16px rgba(0,0,0,.25)}
+.job:hover{border-color:var(--line-hi);box-shadow:0 4px 16px rgba(15,23,42,.10)}
 .job:focus-within{border-color:var(--primary)}
 .job.pri{border-left:3px solid var(--accent)}
 .top{display:flex;gap:var(--sp-2);align-items:center;flex-wrap:wrap}
 .badge{font-size:var(--fs-12);font-weight:700;letter-spacing:.04em;padding:var(--sp-1) var(--sp-2);border-radius:999px}
-.badge.new{background:#12331f;color:var(--ok)}
-.badge.pri{background:#33270e;color:var(--accent)}
-.badge.watch{background:#33250f;color:var(--warn)}
+.badge.new{background:#dcfce7;color:#047857}
+.badge.pri{background:#fef3c7;color:#92400e}
+.badge.watch{background:#ffedd5;color:#b45309}
 .chip{font-size:var(--fs-12);padding:2px var(--sp-2);border-radius:999px;border:1px solid}
-.chip.swe{color:#7fabff;border-color:#2c4a86}
-.chip.cyber{color:#6fe0ad;border-color:#1f5c41}
-.chip.other{color:#c3b0ff;border-color:#4a3b86}
+.chip.swe{color:#1d4ed8;border-color:#bfdbfe}
+.chip.cyber{color:#047857;border-color:#a7f3d0}
+.chip.other{color:#6d28d9;border-color:#ddd6fe}
 .who{font-size:var(--fs-12);color:var(--muted)}
 .t{font-size:var(--fs-16);font-weight:600;margin:var(--sp-2) 0 var(--sp-1)}
 .meta{font-size:var(--fs-14);color:var(--muted);margin-top:2px}
 .act{margin-top:var(--sp-3)}
-.btn{display:inline-flex;align-items:center;min-height:44px;padding:0 var(--sp-4);background:var(--primary);color:#081226;font-weight:600;font-size:var(--fs-14);border-radius:var(--rad-s);text-decoration:none;border:0;cursor:pointer}
-.btn:hover{filter:brightness(1.1)}
+.btn{display:inline-flex;align-items:center;min-height:44px;padding:0 var(--sp-4);background:var(--primary);color:#ffffff;font-weight:600;font-size:var(--fs-14);border-radius:var(--rad-s);text-decoration:none;border:0;cursor:pointer}
+.btn:hover{filter:brightness(.92)}
 .btn.ghost{background:var(--surface);color:var(--text);border:1px solid var(--line)}
 details{margin-top:var(--sp-3)}
 summary{cursor:pointer;color:var(--muted);font-size:var(--fs-14);min-height:32px;display:flex;align-items:center}
 summary:hover{color:var(--text)}
-pre{white-space:pre-wrap;max-width:75ch;font-family:inherit;font-size:var(--fs-14);color:#c6cfe6;background:var(--surface2);border:1px solid var(--line);border-radius:var(--rad-s);padding:var(--sp-3);margin-top:var(--sp-2)}
+pre{white-space:pre-wrap;max-width:75ch;font-family:inherit;font-size:var(--fs-14);color:#334155;background:var(--surface2);border:1px solid var(--line);border-radius:var(--rad-s);padding:var(--sp-3);margin-top:var(--sp-2)}
 .empty{text-align:center;padding:var(--sp-8) var(--sp-4);background:var(--surface);border:1px dashed var(--line);border-radius:var(--rad)}
 .empty h2{font-size:var(--fs-20);margin-bottom:var(--sp-2)}
 .empty p{font-size:var(--fs-14);color:var(--muted);margin-bottom:var(--sp-4)}
@@ -87,7 +87,7 @@ footer a{color:var(--primary)}
 <div class="wrap">
 <header>
   <h1>🎯 Fresher Job <em>Radar</em></h1>
-  <div class="updated">Updated 2026-09-22 12:55</div>
+  <div class="updated">Updated 2026-09-22 13:33</div>
 </header>
 <section class="stats" id="stats" aria-label="Summary statistics"></section>
 <form class="toolbar" role="search" onsubmit="return false">

@@ -113,5 +113,5 @@
    "reqs": "    - requirements and user stories into effective automated test coverage.\n    - Integrate automated tests into CI/CD pipelines and release quality gates.\n    - Analyze failures, troubleshoot issues, and partner with software engineers to drive resolution.\n    - Manage test data, environments, and automation assets to support reliable and repeatable execution.\n    - Improve automation coverage, framework capabilities, and engineering efficiency.\n    - Strong programming skills in Java with experience developing automation frameworks and test utilities.\n    - Hands-on experience with Cucumber, Selenium, Karate, JUnit/TestNG, Rest Assured, or similar automation technologies.\n    - Experience testing REST APIs, microservices, web applications, and database-driven systems.\n    - Knowledge of Git, CI/CD pipelines, DevOps practices, and modern software development methodologies.\n    - Experie"
   }
  ],
- "updated": "2026-09-22 12:55"
+ "updated": "2026-09-22 13:33"
 }
