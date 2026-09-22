@@ -409,6 +409,10 @@ function render(){
   if(r)r.onclick=()=>{$("q").value="";$("trk").value="";$("tier").value="";
     $("cmp").value="";$("newonly").checked=false;render();};
   stats();
+  const ctx=[cmp?`company: ${cmp}`:"",trk?`track: ${trk}`:"",
+             tier?`level: ${tier}`:"",no?"new today only":""]
+    .filter(Boolean).join(" · ");
+  buildRadar(js,ctx);
 }
 const SKILLS=[["python","Programming"],["java","Programming"],["javascript","Programming"],["typescript","Programming"],["golang","Programming"],
 ["sql","Data & Databases"],["machine learning","Data & Databases"],["data structures","CS Fundamentals"],["algorithms","CS Fundamentals"],
@@ -424,16 +428,20 @@ const ADVICE={"Cloud & DevOps":"start with Docker + one cloud (AWS first) and wi
 "Testing & QA":"pytest + Selenium already map to Phase 2 of your prep plan",
 "Programming":"deepen Python and stay Java-literate",
 "Web & APIs":"already your strength from the internship — maintain it"};
-function buildRadar(){
-  const nJD=JOBS.filter(j=>j.reqs).length;
-  if(!nJD){$("radar").innerHTML="<h2>📊 Tech stack demand</h2><p class='sub'>Appears here once jobs with requirement text are tracked.</p>";return;}
-  const corpus=JOBS.map(j=>((j.title||"")+" "+(j.reqs||"")).toLowerCase()).join(" ");
+function buildRadar(js,ctx){
+  const w=js.filter(j=>j.reqs);
+  const nJD=w.length;
+  if(!nJD){$("radar").innerHTML=`<h2>📊 Tech stack demand</h2><p class="sub">No requirement text in this view${ctx?" · "+ctx:""}.</p><p class="sub">Clear the filters to see demand across every tracked role.</p>`;return;}
+  const corpus=w.map(j=>((j.title||"")+" "+(j.reqs||"")).toLowerCase()).join(" ");
   const rows=SKILLS.map(([s,d])=>{const m=corpus.match(new RegExp("\\\\b"+s+"\\\\b","g"));return{s,d,c:m?m.length:0};}).filter(r=>r.c>0);
+  if(!rows.length){$("radar").innerHTML=`<h2>📊 Tech stack demand</h2><p class="sub">${nJD} job description${nJD>1?"s":""} in view${ctx?" · "+ctx:""} — no tracked skills mentioned yet.</p>`;return;}
   const doms={};rows.forEach(r=>doms[r.d]=(doms[r.d]||0)+r.c);
   const order=Object.entries(doms).sort((a,b)=>b[1]-a[1]);
-  const target=order.find(([d])=>!STRENGTH.has(d))||order[0];
-  let h=`<h2>📊 Tech stack demand</h2><p class="sub">mentions across ${nJD} tracked job descriptions — grows with the daily log</p>`;
-  h+=`<div class="focus"><b>🎯 Improve next: ${target[0]}</b> — highest demand (${target[1]} mentions) outside your current strengths. ${ADVICE[target[0]]||"Keep building fundamentals."}</div>`;
+  let h=`<h2>📊 Tech stack demand</h2><p class="sub">${nJD} job description${nJD>1?"s":""} in view${ctx?" · "+ctx:" · full log"} — grows with the daily log</p>`;
+  if(nJD>=3){
+    const target=order.find(([d])=>!STRENGTH.has(d))||order[0];
+    h+=`<div class="focus"><b>🎯 Improve next: ${target[0]}</b> — highest demand (${target[1]} mentions) in this view, outside your current strengths. ${ADVICE[target[0]]||"Keep building fundamentals."}</div>`;
+  }
   const maxD=order[0][1];
   order.forEach(([d,tot])=>{
     const srows=rows.filter(r=>r.d===d).sort((a,b)=>b.c-a.c);
@@ -446,7 +454,6 @@ function buildRadar(){
 }
 ["q","trk","tier","cmp","newonly","pri"].forEach(id=>$(id).addEventListener("input",render));
 render();
-buildRadar();
 </script>
 </body></html>
 """
