@@ -1,0 +1,37 @@
+name: daily-job-screener
+
+on:
+  schedule:
+    - cron: "30 3 * * *"   # 09:00 IST daily (GitHub cron is UTC)
+  workflow_dispatch: {}     # allows manual trigger from the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Restore mailer config from secret
+        run: echo '${{ secrets.MAILER_JSON }}' > mailer.json
+
+      - name: Run the screener
+        run: python job_screener.py
+
+      - name: Commit job log and UI updates
+        run: |
+          git config user.name "job-screener-bot"
+          git config user.email "actions@github.com"
+          git add -f screener-state.json docs/
+          git commit -m "daily log $(date -u +%F)" || echo "nothing new to commit"
+          git push
