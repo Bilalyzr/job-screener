@@ -63,6 +63,20 @@ pre{white-space:pre-wrap;max-width:75ch;font-family:inherit;font-size:var(--fs-1
 .empty{text-align:center;padding:var(--sp-8) var(--sp-4);background:var(--surface);border:1px dashed var(--line);border-radius:var(--rad)}
 .empty h2{font-size:var(--fs-20);margin-bottom:var(--sp-2)}
 .empty p{font-size:var(--fs-14);color:var(--muted);margin-bottom:var(--sp-4)}
+.radar{margin-top:var(--sp-8);background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:var(--sp-4)}
+.radar h2{font-size:var(--fs-20);margin-bottom:var(--sp-1)}
+.radar .sub{font-size:var(--fs-12);color:var(--muted);margin-bottom:var(--sp-4)}
+.focus{border-left:3px solid var(--ok);background:var(--surface2);border-radius:var(--rad-s);padding:var(--sp-3) var(--sp-4);margin-bottom:var(--sp-4);font-size:var(--fs-14)}
+.focus b{color:var(--ok)}
+.dom{margin-bottom:var(--sp-4)}
+.dom-h{display:flex;justify-content:space-between;align-items:baseline;font-size:var(--fs-14);font-weight:600;margin-bottom:var(--sp-2)}
+.dom-h .n{font-size:var(--fs-12);color:var(--muted);font-weight:400}
+.dom-bar{height:4px;background:var(--surface2);border-radius:999px;margin-bottom:var(--sp-2);overflow:hidden}
+.dom-bar i{display:block;height:100%;background:var(--primary);border-radius:999px}
+.skill{display:grid;grid-template-columns:150px 1fr 40px;gap:var(--sp-2);align-items:center;font-size:var(--fs-14);margin-bottom:var(--sp-1)}
+.skill .bar{height:8px;background:var(--surface2);border-radius:999px;overflow:hidden}
+.skill .bar i{display:block;height:100%;background:var(--primary);opacity:.85;border-radius:999px}
+.skill .c{text-align:right;color:var(--muted);font-size:var(--fs-12)}
 footer{margin-top:var(--sp-8);color:var(--muted);font-size:var(--fs-12);text-align:center}
 footer a{color:var(--primary)}
 @media (max-width:640px){.toolbar{display:grid}input,select,.check{width:100%}}
@@ -73,7 +87,7 @@ footer a{color:var(--primary)}
 <div class="wrap">
 <header>
   <h1>🎯 Fresher Job <em>Radar</em></h1>
-  <div class="updated">Updated 2026-09-22 12:44</div>
+  <div class="updated">Updated 2026-09-22 12:55</div>
 </header>
 <section class="stats" id="stats" aria-label="Summary statistics"></section>
 <form class="toolbar" role="search" onsubmit="return false">
@@ -92,6 +106,7 @@ footer a{color:var(--primary)}
 </form>
 <p class="result-line" id="count"></p>
 <div class="jobs" id="list"></div>
+<section class="radar" id="radar" aria-label="Tech stack demand across tracked roles"></section>
 <footer>daily log · email shows only <b>new</b> fresher roles ·
 <a href="https://github.com/Bilalyzr/job-screener">Bilalyzr/job-screener</a></footer>
 </div>
@@ -142,7 +157,42 @@ function render(){
     $("cmp").value="";$("newonly").checked=false;render();};
   stats();
 }
+const SKILLS=[["python","Programming"],["java","Programming"],["javascript","Programming"],["typescript","Programming"],["golang","Programming"],
+["sql","Data & Databases"],["machine learning","Data & Databases"],["data structures","CS Fundamentals"],["algorithms","CS Fundamentals"],
+["react","Web & APIs"],["spring","Web & APIs"],["rest api","Web & APIs"],["microservices","Web & APIs"],
+["aws","Cloud & DevOps"],["azure","Cloud & DevOps"],["gcp","Cloud & DevOps"],["kubernetes","Cloud & DevOps"],["docker","Cloud & DevOps"],["terraform","Cloud & DevOps"],["ci/cd","Cloud & DevOps"],["git","Cloud & DevOps"],["linux","Cloud & DevOps"],
+["selenium","Testing & QA"],["pytest","Testing & QA"],["test automation","Testing & QA"],
+["owasp","Security"],["siem","Security"],["penetration","Security"],["burp","Security"],["wireshark","Security"],["iso 27001","Security"],["soc 2","Security"],["networking","Security"]];
+const STRENGTH=new Set(["Web & APIs","Programming"]);
+const ADVICE={"Cloud & DevOps":"start with Docker + one cloud (AWS first) and wire a CI pipeline into a project",
+"Security":"your cyber track — OWASP Top 10 hands-on, networking (TCP/IP, TLS) and Linux",
+"CS Fundamentals":"keep the daily DSA habit in Python",
+"Data & Databases":"SQL joins and aggregations first, then basic ML with scikit-learn",
+"Testing & QA":"pytest + Selenium already map to Phase 2 of your prep plan",
+"Programming":"deepen Python and stay Java-literate",
+"Web & APIs":"already your strength from the internship — maintain it"};
+function buildRadar(){
+  const nJD=JOBS.filter(j=>j.reqs).length;
+  if(!nJD){$("radar").innerHTML="<h2>📊 Tech stack demand</h2><p class='sub'>Appears here once jobs with requirement text are tracked.</p>";return;}
+  const corpus=JOBS.map(j=>((j.title||"")+" "+(j.reqs||"")).toLowerCase()).join(" ");
+  const rows=SKILLS.map(([s,d])=>{const m=corpus.match(new RegExp("\\b"+s+"\\b","g"));return{s,d,c:m?m.length:0};}).filter(r=>r.c>0);
+  const doms={};rows.forEach(r=>doms[r.d]=(doms[r.d]||0)+r.c);
+  const order=Object.entries(doms).sort((a,b)=>b[1]-a[1]);
+  const target=order.find(([d])=>!STRENGTH.has(d))||order[0];
+  let h=`<h2>📊 Tech stack demand</h2><p class="sub">mentions across ${nJD} tracked job descriptions — grows with the daily log</p>`;
+  h+=`<div class="focus"><b>🎯 Improve next: ${target[0]}</b> — highest demand (${target[1]} mentions) outside your current strengths. ${ADVICE[target[0]]||"Keep building fundamentals."}</div>`;
+  const maxD=order[0][1];
+  order.forEach(([d,tot])=>{
+    const srows=rows.filter(r=>r.d===d).sort((a,b)=>b.c-a.c);
+    const maxS=srows[0].c;
+    h+=`<div class="dom"><div class="dom-h"><span>${d}${STRENGTH.has(d)?' <span class="who">· your strength</span>':""}</span><span class="n">${tot} mentions</span></div><div class="dom-bar"><i style="width:${Math.round(tot/maxD*100)}%"></i></div>`;
+    srows.forEach(r=>{h+=`<div class="skill"><span>${r.s}</span><span class="bar"><i style="width:${Math.round(r.c/maxS*100)}%"></i></span><span class="c">${r.c}</span></div>`;});
+    h+="</div>";
+  });
+  $("radar").innerHTML=h;
+}
 ["q","trk","tier","cmp","newonly","pri"].forEach(id=>$(id).addEventListener("input",render));
 render();
+buildRadar();
 </script>
 </body></html>
