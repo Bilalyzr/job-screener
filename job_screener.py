@@ -41,6 +41,9 @@ GREENHOUSE_BOARDS = {
 PHENOM_SITES = {
     "mastercard": "https://careers.mastercard.com/us/en",
 }
+# top product-based targets: their roles sort first in mail + UI
+PRIORITY_COMPANIES = {"mastercard", "stripe", "visa", "paypal"}
+DOCS = ROOT / "docs"
 
 # ------------------------------------------------------------- filters -----
 INDIA = re.compile(r"(india|bangalore|bengaluru|hyderabad|chennai|pune|mumbai|"
@@ -247,6 +250,154 @@ def send_telegram(text):
     return f"telegram: sent to chat {chat}"
 
 
+# ---------------------------------------------------------------- site ------
+INDEX_TMPL = """<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fresher Job Radar</title>
+<style>
+:root{--bg:#0b1020;--card:#141b2e;--line:#232d47;--txt:#e8ecf7;--mut:#8b96b3;--acc:#f7b32b;--swe:#4f8cff;--cyb:#3ecf8e;--other:#a78bfa}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt);padding:24px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between;margin-bottom:16px}
+h1{font-size:1.5rem} h1 span{color:var(--acc)}
+.mut{color:var(--mut);font-size:.85rem}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 16px}
+.stat b{font-size:1.3rem;display:block}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+input,select{background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:8px 10px;font-size:.9rem}
+input{min-width:220px}
+label.ck{display:flex;gap:6px;align-items:center;color:var(--mut);font-size:.9rem}
+.jobs{display:grid;gap:10px}
+.job{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.job.pri{border-color:var(--acc)}
+.top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.badge{font-size:.7rem;font-weight:700;letter-spacing:.5px;padding:3px 8px;border-radius:999px}
+.badge.new{background:#1d3b1d;color:#6fe08f}
+.badge.pri{background:#3b2f10;color:var(--acc)}
+.chip{font-size:.72rem;padding:2px 9px;border-radius:999px;border:1px solid}
+.chip.swe{color:var(--swe);border-color:var(--swe)}
+.chip.cyber{color:var(--cyb);border-color:var(--cyb)}
+.chip.other{color:var(--other);border-color:var(--other)}
+.t{font-size:1.02rem;font-weight:600;margin:6px 0 2px}
+a{color:var(--swe);text-decoration:none} a:hover{text-decoration:underline}
+.meta{color:var(--mut);font-size:.82rem;margin-top:2px}
+details{margin-top:8px} summary{cursor:pointer;color:var(--mut);font-size:.85rem}
+pre{white-space:pre-wrap;font-family:inherit;font-size:.83rem;color:#c6cfe6;background:#0e1425;border:1px solid var(--line);border-radius:8px;padding:10px;margin-top:6px}
+.empty{color:var(--mut);text-align:center;padding:40px}
+footer{margin-top:20px;color:var(--mut);font-size:.8rem;text-align:center}
+</style>
+</head>
+<body>
+<header><h1>🎯 Fresher Job <span>Radar</span></h1><div class="mut">updated __UPDATED__</div></header>
+<div class="stats" id="stats"></div>
+<div class="controls">
+<input id="q" placeholder="Search title / company / location…">
+<select id="trk"><option value="">All tracks</option><option value="swe">Software Eng</option><option value="cyber">Cyber Security</option><option value="other">Other tech</option></select>
+<select id="cmp"><option value="">All companies</option></select>
+<label class="ck"><input type="checkbox" id="newonly"> New today only</label>
+<label class="ck"><input type="checkbox" id="pri" checked> ⭐ Product-company priority</label>
+</div>
+<div class="jobs" id="list"></div>
+<footer>daily log · mail + UI stay in sync · repo: Bilalyzr/job-screener</footer>
+<script>
+const JOBS=__DATA__,TODAY="__TODAY__";
+const $=id=>document.getElementById(id);
+[...new Set(JOBS.map(j=>j.company))].sort().forEach(c=>{const o=document.createElement("option");o.textContent=c;$("cmp").appendChild(o);});
+const esc=s=>(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function stats(){
+  const n={total:JOBS.length,new:JOBS.filter(j=>j.first_seen===TODAY).length,cyber:JOBS.filter(j=>j.track==="cyber").length,open:JOBS.filter(j=>j.last_seen===TODAY).length};
+  $("stats").innerHTML=[["Tracked",n.total],["🆕 Today",n.new],["Cyber",n.cyber],["Open now",n.open]].map(([k,v])=>`<div class="stat"><b>${v}</b><span class="mut">${k}</span></div>`).join("");
+}
+function render(){
+  const q=$("q").value.toLowerCase(),trk=$("trk").value,cmp=$("cmp").value,no=$("newonly").checked;
+  let js=JOBS.filter(j=>(!trk||j.track===trk)&&(!cmp||j.company===cmp)&&(!no||j.first_seen===TODAY)&&(!q||(j.title+j.company+j.location).toLowerCase().includes(q)));
+  js.sort((a,b)=>{if($("pri").checked&&!!b.priority!=!!a.priority)return a.priority?-1:1;return (b.first_seen||"").localeCompare(a.first_seen||"")||a.company.localeCompare(b.company);});
+  $("list").innerHTML=js.length?js.map(j=>`
+   <div class="job ${j.priority?"pri":""}">
+    <div class="top">
+      ${j.first_seen===TODAY?'<span class="badge new">NEW</span>':""}
+      ${j.priority?'<span class="badge pri">⭐ PRIORITY</span>':""}
+      <span class="chip ${j.track}">${j.track==="cyber"?"CYBER":j.track==="swe"?"SWE":"TECH"}</span>
+      <span class="mut">${esc(j.company)} · first seen ${j.first_seen}</span>
+    </div>
+    <div class="t">${esc(j.title)}</div>
+    <div class="meta">📍 ${esc(j.location)} · posted ${esc(j.posted||"n/a")}</div>
+    <div class="meta"><a href="${esc(j.url)}" target="_blank">Apply / view posting →</a></div>
+    ${j.reqs?`<details><summary>Key requirements</summary><pre>${esc(j.reqs)}</pre></details>`:""}
+   </div>`).join(""):'<div class="empty">No jobs match the filters.</div>';
+  stats();
+}
+["q","trk","cmp","newonly","pri"].forEach(id=>$(id).addEventListener("input",render));
+render();
+</script>
+</body></html>
+"""
+
+
+def load_db():
+    dbf = DOCS / "jobs.json"
+    if dbf.exists():
+        try:
+            return json.loads(dbf.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    return {"jobs": []}
+
+
+def update_db(db, matched, today):
+    by_key = {j["key"]: j for j in db["jobs"]}
+    for j in matched:
+        pri = j["company"].lower() in PRIORITY_COMPANIES
+        rec = by_key.get(j["key"])
+        if rec:
+            rec.update(last_seen=today, title=j["title"], location=j["location"],
+                       url=j["url"], posted=j["posted"], track=j["track"],
+                       priority=pri)
+        else:
+            by_key[j["key"]] = {
+                "key": j["key"], "company": j["company"], "title": j["title"],
+                "location": j["location"], "url": j["url"], "posted": j["posted"],
+                "track": j["track"], "first_seen": today, "last_seen": today,
+                "priority": pri,
+                "reqs": extract_requirements(j.get("desc", "")) if j.get("desc") else "",
+            }
+    db["jobs"] = list(by_key.values())
+    db["updated"] = datetime.now().strftime("%Y-%m-%d %H:%M")
+    return db
+
+
+def write_site(db, today):
+    DOCS.mkdir(exist_ok=True)
+    (DOCS / "jobs.json").write_text(
+        json.dumps(db, indent=1, ensure_ascii=False), encoding="utf-8")
+    page = (INDEX_TMPL
+            .replace("__DATA__", json.dumps(db["jobs"], ensure_ascii=False))
+            .replace("__UPDATED__", db.get("updated", ""))
+            .replace("__TODAY__", today))
+    (DOCS / "index.html").write_text(page, encoding="utf-8")
+    return DOCS / "index.html"
+
+
+def push_site(today):
+    import subprocess
+    if not load_notify().get("site", {}).get("push"):
+        return "site push: disabled (set site.push=true in mailer.json)"
+    for args in (["git", "add", "docs"],
+                 ["git", "commit", "-m", f"daily log {today}"],
+                 ["git", "push"]):
+        r = subprocess.run(args, cwd=str(ROOT), capture_output=True,
+                           text=True, timeout=120)
+        out = (r.stdout or "") + (r.stderr or "")
+        if r.returncode != 0 and "nothing to commit" not in out \
+                and "nothing added to commit" not in out:
+            return f"site push: FAILED - {out.strip()[:140]}"
+    return "site push: ok"
+
+
 # ------------------------------------------------------------- pipeline ----
 def classify(job):
     t = job["title"]
@@ -358,7 +509,9 @@ def main():
     # report
     def block(jobs):
         lines = []
-        for j in sorted(jobs, key=lambda x: (not x["is_new"], x["company"])):
+        for j in sorted(jobs, key=lambda x: (not x["is_new"],
+                                             x["company"].lower() not in PRIORITY_COMPANIES,
+                                             x["company"])):
             tag = "🆕 NEW" if j["is_new"] else "still open"
             lines.append(f"### {j['title']}\n")
             lines.append(f"- **Company:** {j['company']}  |  **Location:** {j['location']}")
@@ -408,17 +561,55 @@ def main():
     out.write_text("\n".join(rep), encoding="utf-8")
     (REPORTS / "latest.md").write_text("\n".join(rep), encoding="utf-8")
 
-    # deliver (email full report; telegram first 4000 chars) — never fatal
-    new_count = len(new_cyber) + len(new_swe) + len(new_other)
-    subject = (f"Daily Fresher Jobs - {new_count} new / {len(matched)} open - {today}")
+    # ---- UI: cumulative job log (docs/index.html) — every mailed job lands here
     try:
-        print("[screener]", send_email(subject, plain_text("\n".join(rep))))
+        db = update_db(load_db(), matched, today)
+        idx = write_site(db, today)
+        print(f"[screener] ui: {idx}")
+    except Exception as e:
+        print(f"[screener] ui failed: {e}")
+
+    # ---- deliver: NEW jobs only; explicit "no new jobs" mail otherwise
+    new_jobs = [j for j in matched if j["is_new"]]
+    if new_jobs:
+        lines = [f"NEW FRESHER JOBS - {today}", ""]
+        for track, label in (("cyber", "Cyber Security"),
+                             ("swe", "Software Engineering"),
+                             ("other", "Other tech fresher roles")):
+            tjs = [j for j in new_jobs if j["track"] == track]
+            if not tjs:
+                continue
+            lines.append(f"== {label} ==")
+            for j in tjs:
+                star = "  [PRIORITY]" if j["company"].lower() in PRIORITY_COMPANIES else ""
+                lines.append(f"* {j['company']} - {j['title']}{star}")
+                lines.append(f"  {j['location']} | posted {j['posted'] or 'n/a'}")
+                lines.append(f"  {j['url']}")
+                if j.get("desc"):
+                    lines.append(extract_requirements(j["desc"]))
+            lines.append("")
+        lines.append(f"-- \n{len(matched)} role(s) tracked in total. "
+                     f"Full log: docs/index.html in the job-screener repo.")
+        body = "\n".join(lines)
+        subject = f"NEW fresher jobs - {len(new_jobs)} found - {today}"
+    else:
+        body = (f"No new fresher jobs available today ({today}).\n\n"
+                f"Still being tracked: {len(matched)} role(s) from earlier days "
+                f"(view them in the UI: docs/index.html).\n"
+                f"Keep prepping - new postings usually drop Mon-Wed.")
+        subject = f"No new fresher jobs today - {today}"
+    try:
+        print("[screener]", send_email(subject, body))
     except Exception as e:
         print(f"[screener] email failed: {e}")
     try:
-        print("[screener]", send_telegram(plain_text("\n".join(rep))))
+        print("[screener]", send_telegram(body))
     except Exception as e:
         print(f"[screener] telegram failed: {e}")
+    try:
+        print("[screener]", push_site(today))
+    except Exception as e:
+        print(f"[screener] site push failed: {e}")
 
     print(f"[screener] scanned={len(all_jobs)} matched={len(matched)} "
           f"new={len(new_cyber)+len(new_swe)+len(new_other)} "

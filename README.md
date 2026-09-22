@@ -21,13 +21,21 @@ extracts the key requirements from each posting, and emails you a daily report.
 3. **India-locations only** (configurable via the `INDIA` regex).
 4. **Extracts requirements** from each matching posting (Greenhouse job API
    content; Phenom JSON-LD description).
-5. **Tracks seen jobs** in `screener-state.json` → the report separates 🆕 NEW
-   from *still open*; entries age out after 30 days.
-6. **Writes the report** to `daily-reports/YYYY-MM-DD.md` (+ `latest.md`),
-   including a tech-stack radar table (skill mentions across matched JDs) and a
-   capped "near-miss" footer for plain-titled roles worth a manual check.
-7. **Delivers it**: full report via Gmail SMTP and/or first 4000 chars via
-   Telegram Bot API.
+5. **Ranks product-based companies first** (`PRIORITY_COMPANIES` — Mastercard,
+   Stripe, Visa, PayPal) in both the email and the UI.
+6. **Tracks seen jobs** in `screener-state.json` → 🆕 NEW vs *still open*;
+   entries age out after 30 days.
+7. **Writes the daily report** to `daily-reports/YYYY-MM-DD.md` (+ `latest.md`)
+   with a tech-stack radar table and a capped "near-miss" footer for
+   plain-titled roles worth a manual check.
+8. **Emails NEW jobs only — no repeats.** If nothing new appeared, you get a
+   short "no new fresher jobs today" mail instead. Delivered via Gmail SMTP
+   and/or first 4000 chars via Telegram Bot API.
+9. **Updates the web UI** (`docs/index.html`) — a cumulative, searchable log of
+   every job ever mailed, with stats, filters (track / company / new-today /
+   search) and product-company priority sorting. Optionally auto-commits and
+   pushes `docs/` to GitHub (`site.push` in `mailer.json`) so it can be served
+   as a GitHub Pages site.
 
 ## Setup
 
@@ -54,11 +62,24 @@ PHENOM_SITES["newco"] = "https://careers.newco.com/us/en"
 Run it daily however you like — Task Scheduler, cron, or an agent automation.
 The report is idempotent per day and safe to re-run.
 
+## Web UI
+
+`docs/index.html` is regenerated on every run from `docs/jobs.json` — the
+cumulative log of every fresher job the screener has mailed you. Open it
+locally (just double-click it), or publish it:
+
+**GitHub Pages (one-time):** repo → Settings → Pages → Deploy from a branch →
+`main` / `/docs` → Save. Your dashboard then lives at
+`https://<your-user>.github.io/job-screener/` and updates itself every time the
+screener pushes.
+
 ## Files
 
 | File | Purpose |
 |---|---|
-| `job_screener.py` | the screener + report generator + mailer |
+| `job_screener.py` | the screener + report generator + mailer + UI builder |
 | `mailer.example.json` | delivery config template (copy to `mailer.json`) |
+| `docs/index.html` | web UI — cumulative daily log (auto-pushed) |
+| `docs/jobs.json` | UI data source |
 | `screener-state.json` | seen-job tracker (gitignored) |
 | `daily-reports/` | generated reports (gitignored) |
