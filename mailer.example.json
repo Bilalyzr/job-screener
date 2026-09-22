@@ -1,0 +1,11 @@
+{
+  "email": {
+    "sender": "yourgmail@gmail.com",
+    "app_password": "16-char Google App Password (myaccount.google.com > Security > App passwords)",
+    "recipient": "yourgmail@gmail.com"
+  },
+  "telegram": {
+    "bot_token": "",
+    "chat_id": ""
+  }
+}

@@ -1,0 +1,14 @@
+# secrets — never commit
+mailer.json
+
+# local runtime state
+screener-state.json
+daily-reports/
+
+# personal notes
+Mastercard-Prep-Plan.md
+
+# os junk
+__pycache__/
+*.pyc
+Thumbs.db
