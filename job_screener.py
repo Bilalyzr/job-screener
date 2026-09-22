@@ -258,80 +258,141 @@ INDEX_TMPL = """<!doctype html>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Fresher Job Radar</title>
 <style>
-:root{--bg:#0b1020;--card:#141b2e;--line:#232d47;--txt:#e8ecf7;--mut:#8b96b3;--acc:#f7b32b;--swe:#4f8cff;--cyb:#3ecf8e;--other:#a78bfa}
+:root{
+  --bg:#0b1020; --surface:#141b2e; --surface2:#0e1425;
+  --line:#232d47; --line-hi:#33406a;
+  --text:#e8ecf7; --muted:#9aa5c3;
+  --primary:#4f8cff; --accent:#f7b32b; --ok:#3ecf8e; --warn:#ffb84d;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-6:24px; --sp-8:32px;
+  --fs-12:12px; --fs-14:14px; --fs-16:16px; --fs-20:20px; --fs-28:28px;
+  --rad:12px; --rad-s:8px;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt);padding:24px}
-header{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between;margin-bottom:16px}
-h1{font-size:1.5rem} h1 span{color:var(--acc)}
-.mut{color:var(--mut);font-size:.85rem}
-.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 16px}
-.stat b{font-size:1.3rem;display:block}
-.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-input,select{background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:8px 10px;font-size:.9rem}
-input{min-width:220px}
-label.ck{display:flex;gap:6px;align-items:center;color:var(--mut);font-size:.9rem}
-.jobs{display:grid;gap:10px}
-.job{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-.job.pri{border-color:var(--acc)}
-.top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.badge{font-size:.7rem;font-weight:700;letter-spacing:.5px;padding:3px 8px;border-radius:999px}
-.badge.new{background:#1d3b1d;color:#6fe08f}
-.badge.pri{background:#3b2f10;color:var(--acc)}
-.badge.watch{background:#3a2a10;color:#ffb84d}
-.chip{font-size:.72rem;padding:2px 9px;border-radius:999px;border:1px solid}
-.chip.swe{color:var(--swe);border-color:var(--swe)}
-.chip.cyber{color:var(--cyb);border-color:var(--cyb)}
-.chip.other{color:var(--other);border-color:var(--other)}
-.t{font-size:1.02rem;font-weight:600;margin:6px 0 2px}
-a{color:var(--swe);text-decoration:none} a:hover{text-decoration:underline}
-.meta{color:var(--mut);font-size:.82rem;margin-top:2px}
-details{margin-top:8px} summary{cursor:pointer;color:var(--mut);font-size:.85rem}
-pre{white-space:pre-wrap;font-family:inherit;font-size:.83rem;color:#c6cfe6;background:#0e1425;border:1px solid var(--line);border-radius:8px;padding:10px;margin-top:6px}
-.empty{color:var(--mut);text-align:center;padding:40px}
-footer{margin-top:20px;color:var(--mut);font-size:.8rem;text-align:center}
+body{background:var(--bg);color:var(--text);font:16px/1.5 'Segoe UI',system-ui,sans-serif;padding:var(--sp-6) var(--sp-4)}
+.wrap{max-width:1120px;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:baseline;gap:var(--sp-3);flex-wrap:wrap;margin-bottom:var(--sp-6)}
+h1{font-size:var(--fs-28);font-weight:700;letter-spacing:-.02em}
+h1 em{color:var(--accent);font-style:normal}
+.updated{font-size:var(--fs-12);color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:var(--sp-3);margin-bottom:var(--sp-6)}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:var(--sp-3) var(--sp-4)}
+.stat b{display:block;font-size:var(--fs-28);font-weight:700;line-height:1.2}
+.stat span{font-size:var(--fs-12);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.stat.hl b{color:var(--ok)}
+.toolbar{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-4)}
+input,select{min-height:44px;background:var(--surface);border:1px solid var(--line);color:var(--text);border-radius:var(--rad-s);padding:0 var(--sp-3);font-size:var(--fs-14)}
+input{min-width:240px}
+input:hover,select:hover{border-color:var(--line-hi)}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.check{display:flex;align-items:center;gap:var(--sp-2);min-height:44px;padding:0 var(--sp-2);font-size:var(--fs-14);color:var(--muted);cursor:pointer;border-radius:var(--rad-s)}
+.check:hover{color:var(--text)}
+.check input{min-width:16px;min-height:16px;accent-color:var(--primary)}
+.result-line{font-size:var(--fs-12);color:var(--muted);margin:0 0 var(--sp-3)}
+.jobs{display:grid;gap:var(--sp-3)}
+.job{background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:var(--sp-4);transition:border-color .15s,box-shadow .15s}
+.job:hover{border-color:var(--line-hi);box-shadow:0 4px 16px rgba(0,0,0,.25)}
+.job:focus-within{border-color:var(--primary)}
+.job.pri{border-left:3px solid var(--accent)}
+.top{display:flex;gap:var(--sp-2);align-items:center;flex-wrap:wrap}
+.badge{font-size:var(--fs-12);font-weight:700;letter-spacing:.04em;padding:var(--sp-1) var(--sp-2);border-radius:999px}
+.badge.new{background:#12331f;color:var(--ok)}
+.badge.pri{background:#33270e;color:var(--accent)}
+.badge.watch{background:#33250f;color:var(--warn)}
+.chip{font-size:var(--fs-12);padding:2px var(--sp-2);border-radius:999px;border:1px solid}
+.chip.swe{color:#7fabff;border-color:#2c4a86}
+.chip.cyber{color:#6fe0ad;border-color:#1f5c41}
+.chip.other{color:#c3b0ff;border-color:#4a3b86}
+.who{font-size:var(--fs-12);color:var(--muted)}
+.t{font-size:var(--fs-16);font-weight:600;margin:var(--sp-2) 0 var(--sp-1)}
+.meta{font-size:var(--fs-14);color:var(--muted);margin-top:2px}
+.act{margin-top:var(--sp-3)}
+.btn{display:inline-flex;align-items:center;min-height:44px;padding:0 var(--sp-4);background:var(--primary);color:#081226;font-weight:600;font-size:var(--fs-14);border-radius:var(--rad-s);text-decoration:none;border:0;cursor:pointer}
+.btn:hover{filter:brightness(1.1)}
+.btn.ghost{background:var(--surface);color:var(--text);border:1px solid var(--line)}
+details{margin-top:var(--sp-3)}
+summary{cursor:pointer;color:var(--muted);font-size:var(--fs-14);min-height:32px;display:flex;align-items:center}
+summary:hover{color:var(--text)}
+pre{white-space:pre-wrap;max-width:75ch;font-family:inherit;font-size:var(--fs-14);color:#c6cfe6;background:var(--surface2);border:1px solid var(--line);border-radius:var(--rad-s);padding:var(--sp-3);margin-top:var(--sp-2)}
+.empty{text-align:center;padding:var(--sp-8) var(--sp-4);background:var(--surface);border:1px dashed var(--line);border-radius:var(--rad)}
+.empty h2{font-size:var(--fs-20);margin-bottom:var(--sp-2)}
+.empty p{font-size:var(--fs-14);color:var(--muted);margin-bottom:var(--sp-4)}
+footer{margin-top:var(--sp-8);color:var(--muted);font-size:var(--fs-12);text-align:center}
+footer a{color:var(--primary)}
+@media (max-width:640px){.toolbar{display:grid}input,select,.check{width:100%}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<header><h1>🎯 Fresher Job <span>Radar</span></h1><div class="mut">updated __UPDATED__</div></header>
-<div class="stats" id="stats"></div>
-<div class="controls">
-<input id="q" placeholder="Search title / company / location…">
-<select id="trk"><option value="">All tracks</option><option value="swe">Software Eng</option><option value="cyber">Cyber Security</option><option value="other">Other tech</option></select>
-<select id="tier"><option value="">All levels</option><option value="fresher">Fresher (mailed)</option><option value="watch">Watch — verify level</option></select>
-<select id="cmp"><option value="">All companies</option></select>
-<label class="ck"><input type="checkbox" id="newonly"> New today only</label>
-<label class="ck"><input type="checkbox" id="pri" checked> ⭐ Product-company priority</label>
-</div>
+<div class="wrap">
+<header>
+  <h1>🎯 Fresher Job <em>Radar</em></h1>
+  <div class="updated">Updated __UPDATED__</div>
+</header>
+<section class="stats" id="stats" aria-label="Summary statistics"></section>
+<form class="toolbar" role="search" onsubmit="return false">
+  <input id="q" type="search" aria-label="Search by title, company, or location" placeholder="Search title, company, location…">
+  <select id="trk" aria-label="Filter by job track">
+    <option value="">All tracks</option><option value="swe">Software Eng</option>
+    <option value="cyber">Cyber Security</option><option value="other">Other tech</option>
+  </select>
+  <select id="tier" aria-label="Filter by experience level">
+    <option value="">All levels</option><option value="fresher">Fresher (mailed)</option>
+    <option value="watch">Watch — verify level</option>
+  </select>
+  <select id="cmp" aria-label="Filter by company"><option value="">All companies</option></select>
+  <label class="check"><input type="checkbox" id="newonly"> New today only</label>
+  <label class="check"><input type="checkbox" id="pri" checked> ⭐ Priority first</label>
+</form>
+<p class="result-line" id="count"></p>
 <div class="jobs" id="list"></div>
-<footer>daily log · mail + UI stay in sync · repo: Bilalyzr/job-screener</footer>
+<footer>daily log · email shows only <b>new</b> fresher roles ·
+<a href="https://github.com/Bilalyzr/job-screener">Bilalyzr/job-screener</a></footer>
+</div>
 <script>
 const JOBS=__DATA__,TODAY="__TODAY__";
 const $=id=>document.getElementById(id);
 [...new Set(JOBS.map(j=>j.company))].sort().forEach(c=>{const o=document.createElement("option");o.textContent=c;$("cmp").appendChild(o);});
 const esc=s=>(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function stats(){
-  const n={total:JOBS.length,new:JOBS.filter(j=>j.first_seen===TODAY).length,fres:JOBS.filter(j=>j.tier!=="watch").length,watch:JOBS.filter(j=>j.tier==="watch").length,cyber:JOBS.filter(j=>j.track==="cyber").length,open:JOBS.filter(j=>j.last_seen===TODAY).length};
-  $("stats").innerHTML=[["Tracked",n.total],["🆕 Today",n.new],["Fresher",n.fres],["Watch",n.watch],["Cyber",n.cyber]].map(([k,v])=>`<div class="stat"><b>${v}</b><span class="mut">${k}</span></div>`).join("");
+  const n={total:JOBS.length,new:JOBS.filter(j=>j.first_seen===TODAY).length,
+           fres:JOBS.filter(j=>j.tier!=="watch").length,
+           watch:JOBS.filter(j=>j.tier==="watch").length,
+           cyber:JOBS.filter(j=>j.track==="cyber").length};
+  $("stats").innerHTML=[["Tracked",n.total],["New today",n.new,"hl"],["Fresher",n.fres],
+                        ["Watch",n.watch],["Cyber",n.cyber]]
+    .map(([k,v,hl])=>`<div class="stat ${hl||""}"><b>${v}</b><span>${k}</span></div>`).join("");
 }
 function render(){
-  const q=$("q").value.toLowerCase(),trk=$("trk").value,cmp=$("cmp").value,no=$("newonly").checked,tier=$("tier").value;
-  let js=JOBS.filter(j=>(!trk||j.track===trk)&&(!cmp||j.company===cmp)&&(!tier||j.tier===tier)&&(!no||j.first_seen===TODAY)&&(!q||(j.title+j.company+j.location).toLowerCase().includes(q)));
-  js.sort((a,b)=>{if($("pri").checked&&!!b.priority!=!!a.priority)return a.priority?-1:1;if((a.tier==="watch")!==(b.tier==="watch"))return a.tier==="watch"?1:-1;return (b.first_seen||"").localeCompare(a.first_seen||"")||a.company.localeCompare(b.company);});
+  const q=$("q").value.toLowerCase(),trk=$("trk").value,cmp=$("cmp").value,
+        no=$("newonly").checked,tier=$("tier").value;
+  let js=JOBS.filter(j=>(!trk||j.track===trk)&&(!cmp||j.company===cmp)&&
+        (!tier||j.tier===tier)&&(!no||j.first_seen===TODAY)&&
+        (!q||(j.title+j.company+j.location).toLowerCase().includes(q)));
+  js.sort((a,b)=>{
+    if($("pri").checked&&!!b.priority!=!!a.priority)return a.priority?-1:1;
+    if((a.tier==="watch")!==(b.tier==="watch"))return a.tier==="watch"?1:-1;
+    return (b.first_seen||"").localeCompare(a.first_seen||"")||a.company.localeCompare(b.company);});
+  $("count").textContent=`Showing ${js.length} of ${JOBS.length} tracked roles`;
   $("list").innerHTML=js.length?js.map(j=>`
-   <div class="job ${j.priority?"pri":""}">
+   <article class="job ${j.priority?"pri":""}">
     <div class="top">
       ${j.first_seen===TODAY?'<span class="badge new">NEW</span>':""}
       ${j.priority?'<span class="badge pri">⭐ PRIORITY</span>':""}
       ${j.tier==="watch"?'<span class="badge watch">VERIFY LEVEL</span>':""}
       <span class="chip ${j.track}">${j.track==="cyber"?"CYBER":j.track==="swe"?"SWE":"TECH"}</span>
-      <span class="mut">${esc(j.company)} · first seen ${j.first_seen}</span>
+      <span class="who">${esc(j.company)} · first seen ${j.first_seen}</span>
     </div>
-    <div class="t">${esc(j.title)}</div>
-    <div class="meta">📍 ${esc(j.location)} · posted ${esc(j.posted||"n/a")}</div>
-    <div class="meta"><a href="${esc(j.url)}" target="_blank">Apply / view posting →</a></div>
+    <h2 class="t">${esc(j.title)}</h2>
+    <p class="meta">📍 ${esc(j.location)} · posted ${esc(j.posted||"n/a")}</p>
+    <div class="act"><a class="btn" href="${esc(j.url)}" target="_blank" rel="noopener">View &amp; apply →</a></div>
     ${j.reqs?`<details><summary>Key requirements</summary><pre>${esc(j.reqs)}</pre></details>`:""}
-   </div>`).join(""):'<div class="empty">No jobs match the filters.</div>';
+   </article>`).join("")
+   :`<div class="empty"><h2>No jobs match your filters</h2>
+     <p>Try a different keyword — or reset the filters to see every tracked role.</p>
+     <button class="btn ghost" id="reset" type="button">Reset filters</button></div>`;
+  const r=$("reset");
+  if(r)r.onclick=()=>{$("q").value="";$("trk").value="";$("tier").value="";
+    $("cmp").value="";$("newonly").checked=false;render();};
   stats();
 }
 ["q","trk","tier","cmp","newonly","pri"].forEach(id=>$(id).addEventListener("input",render));
