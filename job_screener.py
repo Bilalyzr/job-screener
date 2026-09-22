@@ -278,6 +278,7 @@ label.ck{display:flex;gap:6px;align-items:center;color:var(--mut);font-size:.9re
 .badge{font-size:.7rem;font-weight:700;letter-spacing:.5px;padding:3px 8px;border-radius:999px}
 .badge.new{background:#1d3b1d;color:#6fe08f}
 .badge.pri{background:#3b2f10;color:var(--acc)}
+.badge.watch{background:#3a2a10;color:#ffb84d}
 .chip{font-size:.72rem;padding:2px 9px;border-radius:999px;border:1px solid}
 .chip.swe{color:var(--swe);border-color:var(--swe)}
 .chip.cyber{color:var(--cyb);border-color:var(--cyb)}
@@ -297,6 +298,7 @@ footer{margin-top:20px;color:var(--mut);font-size:.8rem;text-align:center}
 <div class="controls">
 <input id="q" placeholder="Search title / company / location…">
 <select id="trk"><option value="">All tracks</option><option value="swe">Software Eng</option><option value="cyber">Cyber Security</option><option value="other">Other tech</option></select>
+<select id="tier"><option value="">All levels</option><option value="fresher">Fresher (mailed)</option><option value="watch">Watch — verify level</option></select>
 <select id="cmp"><option value="">All companies</option></select>
 <label class="ck"><input type="checkbox" id="newonly"> New today only</label>
 <label class="ck"><input type="checkbox" id="pri" checked> ⭐ Product-company priority</label>
@@ -309,18 +311,19 @@ const $=id=>document.getElementById(id);
 [...new Set(JOBS.map(j=>j.company))].sort().forEach(c=>{const o=document.createElement("option");o.textContent=c;$("cmp").appendChild(o);});
 const esc=s=>(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function stats(){
-  const n={total:JOBS.length,new:JOBS.filter(j=>j.first_seen===TODAY).length,cyber:JOBS.filter(j=>j.track==="cyber").length,open:JOBS.filter(j=>j.last_seen===TODAY).length};
-  $("stats").innerHTML=[["Tracked",n.total],["🆕 Today",n.new],["Cyber",n.cyber],["Open now",n.open]].map(([k,v])=>`<div class="stat"><b>${v}</b><span class="mut">${k}</span></div>`).join("");
+  const n={total:JOBS.length,new:JOBS.filter(j=>j.first_seen===TODAY).length,fres:JOBS.filter(j=>j.tier!=="watch").length,watch:JOBS.filter(j=>j.tier==="watch").length,cyber:JOBS.filter(j=>j.track==="cyber").length,open:JOBS.filter(j=>j.last_seen===TODAY).length};
+  $("stats").innerHTML=[["Tracked",n.total],["🆕 Today",n.new],["Fresher",n.fres],["Watch",n.watch],["Cyber",n.cyber]].map(([k,v])=>`<div class="stat"><b>${v}</b><span class="mut">${k}</span></div>`).join("");
 }
 function render(){
-  const q=$("q").value.toLowerCase(),trk=$("trk").value,cmp=$("cmp").value,no=$("newonly").checked;
-  let js=JOBS.filter(j=>(!trk||j.track===trk)&&(!cmp||j.company===cmp)&&(!no||j.first_seen===TODAY)&&(!q||(j.title+j.company+j.location).toLowerCase().includes(q)));
-  js.sort((a,b)=>{if($("pri").checked&&!!b.priority!=!!a.priority)return a.priority?-1:1;return (b.first_seen||"").localeCompare(a.first_seen||"")||a.company.localeCompare(b.company);});
+  const q=$("q").value.toLowerCase(),trk=$("trk").value,cmp=$("cmp").value,no=$("newonly").checked,tier=$("tier").value;
+  let js=JOBS.filter(j=>(!trk||j.track===trk)&&(!cmp||j.company===cmp)&&(!tier||j.tier===tier)&&(!no||j.first_seen===TODAY)&&(!q||(j.title+j.company+j.location).toLowerCase().includes(q)));
+  js.sort((a,b)=>{if($("pri").checked&&!!b.priority!=!!a.priority)return a.priority?-1:1;if((a.tier==="watch")!==(b.tier==="watch"))return a.tier==="watch"?1:-1;return (b.first_seen||"").localeCompare(a.first_seen||"")||a.company.localeCompare(b.company);});
   $("list").innerHTML=js.length?js.map(j=>`
    <div class="job ${j.priority?"pri":""}">
     <div class="top">
       ${j.first_seen===TODAY?'<span class="badge new">NEW</span>':""}
       ${j.priority?'<span class="badge pri">⭐ PRIORITY</span>':""}
+      ${j.tier==="watch"?'<span class="badge watch">VERIFY LEVEL</span>':""}
       <span class="chip ${j.track}">${j.track==="cyber"?"CYBER":j.track==="swe"?"SWE":"TECH"}</span>
       <span class="mut">${esc(j.company)} · first seen ${j.first_seen}</span>
     </div>
@@ -331,7 +334,7 @@ function render(){
    </div>`).join(""):'<div class="empty">No jobs match the filters.</div>';
   stats();
 }
-["q","trk","cmp","newonly","pri"].forEach(id=>$(id).addEventListener("input",render));
+["q","trk","tier","cmp","newonly","pri"].forEach(id=>$(id).addEventListener("input",render));
 render();
 </script>
 </body></html>
@@ -348,23 +351,25 @@ def load_db():
     return {"jobs": []}
 
 
-def update_db(db, matched, today):
+def update_db(db, matched, watch, today):
     by_key = {j["key"]: j for j in db["jobs"]}
-    for j in matched:
-        pri = j["company"].lower() in PRIORITY_COMPANIES
-        rec = by_key.get(j["key"])
-        if rec:
-            rec.update(last_seen=today, title=j["title"], location=j["location"],
-                       url=j["url"], posted=j["posted"], track=j["track"],
-                       priority=pri)
-        else:
-            by_key[j["key"]] = {
-                "key": j["key"], "company": j["company"], "title": j["title"],
-                "location": j["location"], "url": j["url"], "posted": j["posted"],
-                "track": j["track"], "first_seen": today, "last_seen": today,
-                "priority": pri,
-                "reqs": extract_requirements(j.get("desc", "")) if j.get("desc") else "",
-            }
+    for tier, jobs in (("fresher", matched), ("watch", watch)):
+        for j in jobs:
+            pri = j["company"].lower() in PRIORITY_COMPANIES
+            rec = by_key.get(j["key"])
+            if rec:
+                rec.update(last_seen=today, title=j["title"], location=j["location"],
+                           url=j["url"], posted=j["posted"], track=j["track"],
+                           priority=pri, tier=tier)
+            else:
+                by_key[j["key"]] = {
+                    "key": j["key"], "company": j["company"], "title": j["title"],
+                    "location": j["location"], "url": j["url"], "posted": j["posted"],
+                    "track": j["track"], "tier": tier,
+                    "first_seen": today, "last_seen": today,
+                    "priority": pri,
+                    "reqs": extract_requirements(j.get("desc", "")) if j.get("desc") else "",
+                }
     db["jobs"] = list(by_key.values())
     db["updated"] = datetime.now().strftime("%Y-%m-%d %H:%M")
     return db
@@ -393,7 +398,8 @@ def push_site(today):
                            text=True, timeout=120)
         out = (r.stdout or "") + (r.stderr or "")
         if r.returncode != 0 and "nothing to commit" not in out \
-                and "nothing added to commit" not in out:
+                and "nothing added to commit" not in out \
+                and "no changes added" not in out:
             return f"site push: FAILED - {out.strip()[:140]}"
     return "site push: ok"
 
@@ -473,11 +479,30 @@ def main():
 
     # drop roles whose full JD turns out to demand 3+ years experience
     matched = [j for j in matched if not wants_senior_years(j)]
-    near_miss = [j for j in all_jobs
-                 if j.get("title") and base_match(j) and not is_fresher(j)
-                 and j["key"] not in {m["key"] for m in matched}][:6]
 
-    for j in matched:
+    # watch tier: India tech roles without an explicit fresher marker.
+    # Logged in the UI (never mailed); the JD check drops 3+ yrs demands and
+    # can promote genuinely entry-level JDs into the fresher (mailed) tier.
+    watch = [j for j in all_jobs
+             if j.get("title") and base_match(j) and not is_fresher(j)
+             and j["key"] not in {m["key"] for m in matched}]
+    with ThreadPoolExecutor(max_workers=6) as ex:
+        futs = [ex.submit(greenhouse_detail,
+                          next(b for b, c in GREENHOUSE_BOARDS.items()
+                               if c == j["company"]), j)
+                for j in watch[:60] if j["key"].startswith("gh:")]
+        for f in as_completed(futs):
+            f.result()
+    promoted, kept = [], []
+    for j in watch:
+        if wants_senior_years(j):
+            continue
+        (promoted if is_fresher(j) else kept).append(j)
+    matched += promoted
+    watch = kept
+    near_miss = watch[:6]
+
+    for j in matched + watch:
         j["track"] = classify(j)
 
     # state / diff
@@ -563,9 +588,9 @@ def main():
 
     # ---- UI: cumulative job log (docs/index.html) — every mailed job lands here
     try:
-        db = update_db(load_db(), matched, today)
+        db = update_db(load_db(), matched, watch, today)
         idx = write_site(db, today)
-        print(f"[screener] ui: {idx}")
+        print(f"[screener] ui: {idx} (fresher={len(matched)} watch={len(watch)})")
     except Exception as e:
         print(f"[screener] ui failed: {e}")
 
