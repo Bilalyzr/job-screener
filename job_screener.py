@@ -17,8 +17,6 @@ import json
 import re
 import html as htmllib
 import sys
-import time
-import urllib.parse
 import urllib.request
 import urllib.error
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -46,11 +44,6 @@ PHENOM_SITES = {
 # top product-based targets: their roles sort first in mail + UI
 PRIORITY_COMPANIES = {"mastercard", "stripe", "visa", "paypal"}
 DOCS = ROOT / "docs"
-# LinkedIn guest-search queries (unofficial endpoint, no login, low volume;
-# last-3-days window — may rate-limit or break; failures are non-fatal)
-LINKEDIN_QUERIES = ["software engineer intern", "cyber security intern",
-                    "graduate engineer", "fresher software engineer"]
-LINKEDIN_TPR = "r259200"
 
 # ------------------------------------------------------------- filters -----
 INDIA = re.compile(r"(india|bangalore|bengaluru|hyderabad|chennai|pune|mumbai|"
@@ -95,8 +88,7 @@ SECTION_MARKERS = re.compile(
 
 # ------------------------------------------------------------- http --------
 def fetch(url, rng=None, timeout=25, retries=2):
-    req = urllib.request.Request(url, headers={
-        "User-Agent": UA, "Accept-Language": "en-US,en;q=0.9"})
+    req = urllib.request.Request(url, headers={"User-Agent": UA})
     if rng:
         req.add_header("Range", f"bytes=0-{rng}")
     last = None
@@ -523,57 +515,6 @@ def push_site(today):
     return "site push: ok"
 
 
-# ----------------------------------------------------------- linkedin ------
-def linkedin_detail(job):
-    """Fetch a guest job-view page and pull the description block."""
-    try:
-        raw = fetch(job["url"], timeout=25).decode("utf-8", "replace")
-        m = re.search(r"show-more-less-html__markup[^>]*>(.*?)</div>", raw, re.S)
-        if m:
-            job["desc"] = strip_html(m.group(1))
-    except Exception:
-        job["desc"] = ""
-    return job
-
-
-def fetch_linkedin():
-    """Guest search (no login): parse job cards for each fresher query."""
-    jobs, seen = [], set()
-    for q in LINKEDIN_QUERIES:
-        url = ("https://www.linkedin.com/jobs/search?keywords="
-               + urllib.parse.quote(q)
-               + f"&location=India&f_TPR={LINKEDIN_TPR}&start=0")
-        raw = fetch(url, timeout=30).decode("utf-8", "replace")
-        links = list(re.finditer(
-            r'(?:https://[a-z.]*linkedin\.com)?/jobs/view/[^"]*?-(\d+)\?', raw))
-        for k, m in enumerate(links):
-            jid = m.group(1)
-            if jid in seen:
-                continue
-            seen.add(jid)
-            seg = raw[m.end(): links[k + 1].start() if k + 1 < len(links)
-                      else m.end() + 5000]
-            t = re.search(r'base-search-card__title">\s*(?:<div[^>]*>\s*)?'
-                          r'([^<]+?)\s*<', seg)
-            c = (re.search(r'hidden-nested-link"[^>]*>\s*([^<]+?)\s*<', seg)
-                 or re.search(r'base-search-card__subtitle">\s*([^<]+?)\s*<', seg))
-            loc = re.search(r'job-search-card__location">\s*([^<]+?)\s*<', seg)
-            dt = re.search(r'datetime="([^"T]+)', seg)
-            if not (t and c and loc):
-                continue
-            jobs.append({
-                "key": f"li:{jid}",
-                "company": htmllib.unescape(c.group(1)).strip(),
-                "title": htmllib.unescape(t.group(1)).strip(),
-                "location": htmllib.unescape(loc.group(1)).strip(),
-                "url": f"https://www.linkedin.com/jobs/view/{jid}/",
-                "posted": (dt.group(1) if dt else "")[:10],
-                "desc": "",
-            })
-        time.sleep(2)   # stay polite between queries
-    return jobs
-
-
 # ------------------------------------------------------------- pipeline ----
 def classify(job):
     t = job["title"]
@@ -634,23 +575,6 @@ def main():
         except Exception as e:
             errors.append(f"phenom/{name}: {e}")
 
-    try:
-        all_jobs += fetch_linkedin()
-    except Exception as e:
-        errors.append(f"linkedin: {e}")
-
-    # cross-source dedupe: an original board wins over a LinkedIn repost
-    seen_sig = set()
-    uniq = []
-    for j in all_jobs:
-        sig = (re.sub(r"\s+", " ", (j.get("company") or "")).strip().lower(),
-               re.sub(r"\s+", " ", (j.get("title") or "")).strip().lower())
-        if j["key"].startswith("li:") and sig in seen_sig:
-            continue
-        seen_sig.add(sig)
-        uniq.append(j)
-    all_jobs = uniq
-
     matched = [j for j in all_jobs if j.get("title") and is_match(j)]
 
     # enrich greenhouse matches with full JD text
@@ -661,8 +585,6 @@ def main():
                 board = [b for b, c in GREENHOUSE_BOARDS.items()
                          if c == j["company"]][0]
                 gh_detail_futs.append(ex.submit(greenhouse_detail, board, j))
-            elif j["key"].startswith("li:"):
-                gh_detail_futs.append(ex.submit(linkedin_detail, j))
         for fu in as_completed(gh_detail_futs):
             fu.result()
 

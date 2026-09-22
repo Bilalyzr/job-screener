@@ -8,13 +8,10 @@ extracts the key requirements from each posting, and emails you a daily report.
 
 `job_screener.py` (Python 3, **stdlib only — no pip installs**):
 
-1. **Scans 15 sources in parallel**
+1. **Scans 14 sources in parallel**
    - 13 Greenhouse job boards: Stripe, Cloudflare, Elastic, Twilio, Dropbox,
      Discord, Netskope, Okta, PagerDuty, Zscaler, Datadog, ZoomInfo, Rubrik
    - Mastercard's Phenom careers site (via sitemap + JSON-LD `JobPosting` blocks)
-   - LinkedIn guest search (no login, 4 fresher queries, last-3-days window,
-     India) — unofficial endpoint, kept to low volume; failures are non-fatal
-     and boards still ship. Reposts of board jobs are deduped automatically.
 2. **Filters strictly to fresher roles** — a job qualifies only if its title
    carries an explicit marker (intern / graduate / trainee / campus / new grad /
    entry-level / Engineer I / Analyst I / Associate Analyst) or the JD text
