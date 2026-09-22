@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fresher Job Radar</title>
+<style>
+:root{--bg:#0b1020;--card:#141b2e;--line:#232d47;--txt:#e8ecf7;--mut:#8b96b3;--acc:#f7b32b;--swe:#4f8cff;--cyb:#3ecf8e;--other:#a78bfa}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt);padding:24px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between;margin-bottom:16px}
+h1{font-size:1.5rem} h1 span{color:var(--acc)}
+.mut{color:var(--mut);font-size:.85rem}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 16px}
+.stat b{font-size:1.3rem;display:block}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+input,select{background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:8px 10px;font-size:.9rem}
+input{min-width:220px}
+label.ck{display:flex;gap:6px;align-items:center;color:var(--mut);font-size:.9rem}
+.jobs{display:grid;gap:10px}
+.job{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.job.pri{border-color:var(--acc)}
+.top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.badge{font-size:.7rem;font-weight:700;letter-spacing:.5px;padding:3px 8px;border-radius:999px}
+.badge.new{background:#1d3b1d;color:#6fe08f}
+.badge.pri{background:#3b2f10;color:var(--acc)}
+.chip{font-size:.72rem;padding:2px 9px;border-radius:999px;border:1px solid}
+.chip.swe{color:var(--swe);border-color:var(--swe)}
+.chip.cyber{color:var(--cyb);border-color:var(--cyb)}
+.chip.other{color:var(--other);border-color:var(--other)}
+.t{font-size:1.02rem;font-weight:600;margin:6px 0 2px}
+a{color:var(--swe);text-decoration:none} a:hover{text-decoration:underline}
+.meta{color:var(--mut);font-size:.82rem;margin-top:2px}
+details{margin-top:8px} summary{cursor:pointer;color:var(--mut);font-size:.85rem}
+pre{white-space:pre-wrap;font-family:inherit;font-size:.83rem;color:#c6cfe6;background:#0e1425;border:1px solid var(--line);border-radius:8px;padding:10px;margin-top:6px}
+.empty{color:var(--mut);text-align:center;padding:40px}
+footer{margin-top:20px;color:var(--mut);font-size:.8rem;text-align:center}
+</style>
+</head>
+<body>
+<header><h1>🎯 Fresher Job <span>Radar</span></h1><div class="mut">updated 2026-09-22 12:25</div></header>
+<div class="stats" id="stats"></div>
+<div class="controls">
+<input id="q" placeholder="Search title / company / location…">
+<select id="trk"><option value="">All tracks</option><option value="swe">Software Eng</option><option value="cyber">Cyber Security</option><option value="other">Other tech</option></select>
+<select id="cmp"><option value="">All companies</option></select>
+<label class="ck"><input type="checkbox" id="newonly"> New today only</label>
+<label class="ck"><input type="checkbox" id="pri" checked> ⭐ Product-company priority</label>
+</div>
+<div class="jobs" id="list"></div>
+<footer>daily log · mail + UI stay in sync · repo: Bilalyzr/job-screener</footer>
+<script>
+const JOBS=[{"key": "gh:8031833", "company": "Stripe", "title": "Software Engineer, Intern", "location": "Bengaluru", "url": "https://stripe.com/jobs/search?gh_jid=8031833", "posted": "2026-07-10", "track": "swe", "first_seen": "2026-09-22", "last_seen": "2026-09-22", "priority": true, "reqs": "    - A strong fundamental understanding of computer science through pursuit of a Bachelor’s or Master’s degree in computer science, math, or a related discipline.&nbsp;\n    - Experience and familiarity with programming, either through side projects or classwork. We work mostly in Ruby, Java, Javascript, Go, and Scala. We believe new programming languages can be learned if the fundamentals and general knowledge are present.\n    - Experience from previous internships or other multi-person projects, including open source contributions, that demonstrate evaluating and receiving feedback from mentors, peers, and stakeholders.\n    - Ability to learn unfamiliar systems and form an understanding of those systems, through independent research and working with a mentor or subject matter experts.&nbsp;\n    - Ability to leverage AI tools to accelerate development while applying rigorous critical th"}, {"key": "gh:8759686002", "company": "ZoomInfo", "title": "Software Engineer I - Salesforce", "location": "Bengaluru, Karnataka, India", "url": "https://www.zoominfo.com/careers?gh_jid=8759686002", "posted": "2026-08-31", "track": "swe", "first_seen": "2026-09-22", "last_seen": "2026-09-22", "priority": false, "reqs": "    - Experience: 0–2 years of experience in Business Analysis, Systems Analysis, Quality Assurance, or a related technology role.\n    - Salesforce &amp; Data Management: Basic experience with Salesforce platform configuration and familiarity with data loading tools (e.g., Salesforce Data Loader, Workbench, or Import Wizard).\n    - Technical Aptitude: Understanding of software delivery lifecycles, basic API testing concepts (e.g., Postman), database fundamentals, and data integrity verification.\n    - Problem-Solving: Analytical mindset with a passion for troubleshooting production issues and performing root-cause analysis.\n    - Communication &amp; Collaboration: Strong communication skills with an eagerness to learn from senior engineers and partner effectively across business and technical teams.\n    - ZoomInfo is committed to protecting your privacy when you apply for jobs with us. P"}, {"key": "gh:8759684002", "company": "ZoomInfo", "title": "Software Engineer I - Salesforce Support", "location": "Bengaluru, Karnataka, India", "url": "https://www.zoominfo.com/careers?gh_jid=8759684002", "posted": "2026-09-08", "track": "swe", "first_seen": "2026-09-22", "last_seen": "2026-09-22", "priority": false, "reqs": "    - 0–2 years of experience in Business Analysis, Systems Analysis, Quality Assurance, or a related technology role.\n    - Salesforce &amp; Data Management:\n    - Basic experience with Salesforce platform configuration and familiarity with data loading tools (e.g., Salesforce Data Loader, Workbench, or Import Wizard).\n    - Understanding of software delivery lifecycles, basic API testing concepts (e.g., Postman), database fundamentals, and data integrity verification.\n    - &nbsp;Analytical mindset with a passion for troubleshooting production issues and performing root-cause analysis.\n    - Communication &amp; Collaboration:\n    - &nbsp;Strong communication skills with an eagerness to learn from senior engineers and partner effectively across business and technical teams.\n    - Bachelor’s of Science in Computer Science/Electronics or similar engineering/technical disciplines from a go"}, {"key": "gh:8166537", "company": "Rubrik", "title": "Software Engineer (CPD) - Winter Intern", "location": "Bangalore", "url": "https://www.rubrik.com/company/careers/departments/job.8166537?gh_jid=8166537", "posted": "2026-09-06", "track": "swe", "first_seen": "2026-09-22", "last_seen": "2026-09-22", "priority": false, "reqs": "    - Interns are self-starters, driven, and can manage themselves.&nbsp; Bottom line, if you have a limitless drive and like to win, we want to talk to you - come make history!&nbsp;\n    - Bachelor’s or Master’s degree, preferably in Computer Science\n    - Proficiency in one or more general-purpose object-oriented programming languages like Java, C/C++, Scala, Python\n    - Minimum eligibility criteria\n    - 2027 graduates of Circuital branches only\n    - Available from January 2027 to May 2027 in Pune for the onsite internship (No remote options)\n    - Join Us in Securing and Accelerating the World's AI Transformation\n    - Linkedin | X (formerly Twitter) | Instagram |&nbsp; Rubrik.com\n    - At Rubrik, we are dedicated to fostering a culture where people from all backgrounds are valued, feel they belong, and believe they can succeed. Our commitment to inclusion is at the heart of our mi"}, {"key": "gh:8166523", "company": "Rubrik", "title": "Software Engineer - Winter Intern", "location": "Bangalore", "url": "https://www.rubrik.com/company/careers/departments/job.8166523?gh_jid=8166523", "posted": "2026-09-06", "track": "swe", "first_seen": "2026-09-22", "last_seen": "2026-09-22", "priority": false, "reqs": "    - Rubrik Software Engineer - Interns are self-starters, driven, and can manage themselves.&nbsp; Bottom line, if you have a limitless drive and like to win, we want to talk to you - come make history!&nbsp;\n    - Bachelor’s or Master’s degree or equivalent in computer science or related field\n    - Proficiency in one or more general-purpose programming languages like Java, C/C++, Scala, Python\n    - Minimum eligibility criteria\n    - 2027 graduates of Circuital branches only\n    - Available from January 2027 to May 2027 in Bangalore for the onsite internship (No remote options)\n    - Join Us in Securing and Accelerating the World's AI Transformation\n    - Linkedin | X (formerly Twitter) | Instagram |&nbsp; Rubrik.com\n    - At Rubrik, we are dedicated to fostering a culture where people from all backgrounds are valued, feel they belong, and believe they can succeed. Our commitment to "}],TODAY="2026-09-22";
+const $=id=>document.getElementById(id);
+[...new Set(JOBS.map(j=>j.company))].sort().forEach(c=>{const o=document.createElement("option");o.textContent=c;$("cmp").appendChild(o);});
+const esc=s=>(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function stats(){
+  const n={total:JOBS.length,new:JOBS.filter(j=>j.first_seen===TODAY).length,cyber:JOBS.filter(j=>j.track==="cyber").length,open:JOBS.filter(j=>j.last_seen===TODAY).length};
+  $("stats").innerHTML=[["Tracked",n.total],["🆕 Today",n.new],["Cyber",n.cyber],["Open now",n.open]].map(([k,v])=>`<div class="stat"><b>${v}</b><span class="mut">${k}</span></div>`).join("");
+}
+function render(){
+  const q=$("q").value.toLowerCase(),trk=$("trk").value,cmp=$("cmp").value,no=$("newonly").checked;
+  let js=JOBS.filter(j=>(!trk||j.track===trk)&&(!cmp||j.company===cmp)&&(!no||j.first_seen===TODAY)&&(!q||(j.title+j.company+j.location).toLowerCase().includes(q)));
+  js.sort((a,b)=>{if($("pri").checked&&!!b.priority!=!!a.priority)return a.priority?-1:1;return (b.first_seen||"").localeCompare(a.first_seen||"")||a.company.localeCompare(b.company);});
+  $("list").innerHTML=js.length?js.map(j=>`
+   <div class="job ${j.priority?"pri":""}">
+    <div class="top">
+      ${j.first_seen===TODAY?'<span class="badge new">NEW</span>':""}
+      ${j.priority?'<span class="badge pri">⭐ PRIORITY</span>':""}
+      <span class="chip ${j.track}">${j.track==="cyber"?"CYBER":j.track==="swe"?"SWE":"TECH"}</span>
+      <span class="mut">${esc(j.company)} · first seen ${j.first_seen}</span>
+    </div>
+    <div class="t">${esc(j.title)}</div>
+    <div class="meta">📍 ${esc(j.location)} · posted ${esc(j.posted||"n/a")}</div>
+    <div class="meta"><a href="${esc(j.url)}" target="_blank">Apply / view posting →</a></div>
+    ${j.reqs?`<details><summary>Key requirements</summary><pre>${esc(j.reqs)}</pre></details>`:""}
+   </div>`).join(""):'<div class="empty">No jobs match the filters.</div>';
+  stats();
+}
+["q","trk","cmp","newonly","pri"].forEach(id=>$(id).addEventListener("input",render));
+render();
+</script>
+</body></html>
