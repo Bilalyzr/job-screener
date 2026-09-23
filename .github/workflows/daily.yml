@@ -32,7 +32,8 @@ jobs:
           python job_screener.py 2>&1 | tee run.log
 
       - name: Verify the mail went out
-        run: grep -q "email: sent" run.log || { echo "::error::mail was not sent"; exit 1; }
+        run: |
+          grep -q "email: sent" run.log || { echo "::error::mail was not sent"; exit 1; }
 
       - name: Commit job log and UI updates
         run: |
