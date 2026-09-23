@@ -640,7 +640,8 @@ def main():
         state[k]["last"] = today
     horizon = date.today().toordinal() - 30
     state = {k: v for k, v in state.items()
-             if date.fromisoformat(v["last"]).toordinal() >= horizon}
+             if not isinstance(v, dict)               # keep non-job markers (last_mail)
+             or date.fromisoformat(v["last"]).toordinal() >= horizon}
     STATE_FILE.write_text(json.dumps(state, indent=1), encoding="utf-8")
 
     # skill radar over matched JD text
