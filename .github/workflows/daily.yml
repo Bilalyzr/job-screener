@@ -2,7 +2,7 @@ name: daily-job-screener
 
 on:
   schedule:
-    - cron: "30 3 * * *"   # 09:00 IST daily (GitHub cron is UTC)
+    - cron: "37 3 * * *"   # ~09:07 IST daily — odd minute avoids GitHub's queue rush
   workflow_dispatch: {}     # allows manual trigger from the Actions tab
 
 permissions:
