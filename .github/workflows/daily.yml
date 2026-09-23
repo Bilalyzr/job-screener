@@ -2,7 +2,8 @@ name: daily-job-screener
 
 on:
   schedule:
-    - cron: "37 3 * * *"   # ~09:07 IST daily — odd minute avoids GitHub's queue rush
+    - cron: "37 3 * * *"   # ~09:07 IST primary run (odd minute avoids queue rush)
+    - cron: "17 5 * * *"   # ~10:47 IST backup run — skips mail if already sent today
   workflow_dispatch: {}     # allows manual trigger from the Actions tab
 
 permissions:
@@ -26,7 +27,12 @@ jobs:
         run: echo '${{ secrets.MAILER_JSON }}' > mailer.json
 
       - name: Run the screener
-        run: python job_screener.py
+        run: |
+          set -o pipefail
+          python job_screener.py 2>&1 | tee run.log
+
+      - name: Verify the mail went out
+        run: grep -q "email: sent" run.log || { echo "::error::mail was not sent"; exit 1; }
 
       - name: Commit job log and UI updates
         run: |
@@ -35,3 +41,24 @@ jobs:
           git add -f screener-state.json docs/
           git commit -m "daily log $(date -u +%F)" || echo "nothing new to commit"
           git push
+
+      - name: Alert on failure
+        if: failure()
+        env:
+          MAILER_JSON: ${{ secrets.MAILER_JSON }}
+        run: |
+          python - <<'EOF'
+          import json, os, smtplib
+          from email.message import EmailMessage
+          cfg = json.loads(os.environ["MAILER_JSON"])["email"]
+          m = EmailMessage()
+          m["Subject"] = "ALERT: job-screener failed today"
+          m["From"], m["To"] = cfg["sender"], cfg["recipient"]
+          m.set_content("The daily job-screener run FAILED - the report mail was NOT sent.\n"
+                        "Check the run log: https://github.com/Bilalyzr/job-screener/actions")
+          with smtplib.SMTP("smtp.gmail.com", 587, timeout=30) as s:
+              s.starttls()
+              s.login(cfg["sender"], cfg["app_password"])
+              s.send_message(m)
+          print("alert mail sent")
+          EOF

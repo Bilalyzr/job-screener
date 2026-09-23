@@ -743,9 +743,17 @@ def main():
         subject = f"No new fresher jobs today - {today}"
     if "--no-mail" in sys.argv:
         print("[screener] mail skipped (--no-mail)")
+    elif state.get("last_mail") == today:
+        # a later run the same day (backup schedule / manual) must not re-mail
+        print("[screener] email: sent earlier today (skipping duplicate)")
     else:
         try:
-            print("[screener]", send_email(subject, body))
+            result = send_email(subject, body)
+            print("[screener]", result)
+            if result.startswith("email: sent"):
+                state["last_mail"] = today
+                STATE_FILE.write_text(json.dumps(state, indent=1),
+                                      encoding="utf-8")
         except Exception as e:
             print(f"[screener] email failed: {e}")
         try:
