@@ -510,6 +510,7 @@ def push_site(today):
     if not load_notify().get("site", {}).get("push"):
         return "site push: disabled (set site.push=true in mailer.json)"
     for args in (["git", "add", "docs"],
+                 ["git", "add", "-f", "screener-state.json"],
                  ["git", "commit", "-m", f"daily log {today}"],
                  ["git", "push"]):
         r = subprocess.run(args, cwd=str(ROOT), capture_output=True,

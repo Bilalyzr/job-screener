@@ -2,10 +2,11 @@ name: daily-job-screener
 
 on:
   schedule:
-    - cron: "37 3 * * *"   # 09:07 IST — slot 1
-    - cron: "23 4 * * *"   # 09:53 IST — slot 2 (scheduler drops runs randomly;
-    - cron: "17 5 * * *"   # 10:47 IST — slot 3  extra slots + the last_mail
-    - cron: "07 6 * * *"   # 11:37 IST — slot 4  guard make retries safe)
+    - cron: "15 3 * * *"   # 08:45 IST — laptop-off primary (delay lands ~9:00)
+    - cron: "37 3 * * *"   # 09:07 IST — catch-up slot 2 (scheduler drops runs
+    - cron: "23 4 * * *"   # 09:53 IST — catch-up slot 3  randomly; last_mail
+    - cron: "17 5 * * *"   # 10:47 IST — catch-up slot 4  guard makes extras
+    - cron: "07 6 * * *"   # 11:37 IST — catch-up slot 5  safe no-ops)
   workflow_dispatch: {}     # manual/API trigger — most reliable path
 
 permissions:
