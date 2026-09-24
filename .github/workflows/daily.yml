@@ -2,9 +2,11 @@ name: daily-job-screener
 
 on:
   schedule:
-    - cron: "37 3 * * *"   # ~09:07 IST primary run (odd minute avoids queue rush)
-    - cron: "17 5 * * *"   # ~10:47 IST backup run — skips mail if already sent today
-  workflow_dispatch: {}     # allows manual trigger from the Actions tab
+    - cron: "37 3 * * *"   # 09:07 IST — slot 1
+    - cron: "23 4 * * *"   # 09:53 IST — slot 2 (scheduler drops runs randomly;
+    - cron: "17 5 * * *"   # 10:47 IST — slot 3  extra slots + the last_mail
+    - cron: "07 6 * * *"   # 11:37 IST — slot 4  guard make retries safe)
+  workflow_dispatch: {}     # manual/API trigger — most reliable path
 
 permissions:
   contents: write
