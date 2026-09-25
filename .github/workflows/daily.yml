@@ -2,13 +2,18 @@ name: daily-job-screener
 
 on:
   schedule:
-    - cron: "15 3 * * *"   # 08:45 IST — laptop-off primary (delay lands ~9:00)
-    - cron: "37 3 * * *"   # 09:07 IST — catch-up (GitHub drops scheduled runs
-    - cron: "23 4 * * *"   # 09:53 IST — randomly; each extra slot is an
-    - cron: "57 4 * * *"   # 10:27 IST — independent retry; the last_mail
-    - cron: "17 5 * * *"   # 10:47 IST — guard makes repeats safe no-ops)
-    - cron: "47 5 * * *"   # 11:17 IST
-    - cron: "07 6 * * *"   # 11:37 IST
+    # GitHub's scheduler fires these ~5-6h late (measured 3 days running), so
+    # the overnight cluster below actually executes ~08:45-10:15 AM IST.
+    - cron: "45 21 * * *"   # fires ~02:45 IST — overnight cluster
+    - cron: "15 22 * * *"   # fires ~03:15 IST
+    - cron: "45 22 * * *"   # fires ~03:45 IST
+    - cron: "15 23 * * *"   # fires ~04:15 IST
+    - cron: "45 23 * * *"   # fires ~04:45 IST
+    - cron: "15 0 * * *"    # fires ~05:15 IST
+    - cron: "45 0 * * *"    # fires ~05:45 IST
+    - cron: "15 3 * * *"    # nominal 08:45 IST (morning safety slots)
+    - cron: "37 3 * * *"
+    - cron: "23 4 * * *"
   workflow_dispatch: {}     # manual/API trigger — most reliable path
 
 permissions:
