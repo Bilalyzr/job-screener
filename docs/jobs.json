@@ -127,5 +127,5 @@
    "reqs": "    - Build Java and Spring Boot microservices, REST APIs, and Kafka-based event-driven integrations.\n    - Apply object-oriented design, SOLID principles, reusable patterns, and secure coding practices.\n    - Create unit, component, integration, and regression tests and participate in peer reviews.\n    - Troubleshoot application, data, messaging, performance, and production issues.\n    - Contribute to CI/CD, observability, operational readiness, resiliency, and automation.\n    - Collaborate with product, architecture, testing, operations, and dependent engineering teams.\n    - Hands-on Java and Spring Boot development experience.\n    - Experience with microservices, REST APIs, Kafka or similar messaging platforms, and event-driven architecture.\n    - Knowledge of SQL or NoSQL databases, Git, automated testing, CI/CD, containers, and cloud-native platforms.\n    - Understanding of secure,"
   }
  ],
- "updated": "2026-09-25 09:03"
+ "updated": "2026-09-25 09:39"
 }
