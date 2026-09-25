@@ -76,6 +76,7 @@ SENIOR = re.compile(r"(senior|\bsr\b|staff|principal|manager|director|\blead\b|"
 EXCLUDE = re.compile(r"(account executive|\bsales\b|business development|\bmarketing\b|"
                      r"recruit(er|ing)|customer success|solutions? architect|"
                      r"pre.?sales|partner )", re.I)
+INTERN = re.compile(r"intern", re.I)
 
 SKILL_RADAR = ["python", "java", "javascript", "typescript", "go/golang", "sql",
                "aws", "azure", "gcp", "kubernetes", "docker", "terraform",
@@ -307,6 +308,7 @@ input:hover,select:hover{border-color:var(--line-hi)}
 .badge.new{background:#12331f;color:var(--ok)}
 .badge.pri{background:#33270e;color:var(--accent)}
 .badge.watch{background:#33250f;color:var(--warn)}
+.badge.intern{background:#10233b;color:#7fabff}
 .chip{font-size:var(--fs-12);padding:2px var(--sp-2);border-radius:999px;border:1px solid}
 .chip.swe{color:#7fabff;border-color:#2c4a86}
 .chip.cyber{color:#6fe0ad;border-color:#1f5c41}
@@ -393,9 +395,10 @@ function stats(){
   const n={total:JOBS.length,new:JOBS.filter(j=>j.first_seen===TODAY).length,
            fres:JOBS.filter(j=>j.tier!=="watch").length,
            watch:JOBS.filter(j=>j.tier==="watch").length,
-           cyber:JOBS.filter(j=>j.track==="cyber").length};
+           cyber:JOBS.filter(j=>j.track==="cyber").length,
+           intern:JOBS.filter(j=>/intern/i.test(j.title)).length};
   $("stats").innerHTML=[["Tracked",n.total],["New today",n.new,"hl"],["Fresher",n.fres],
-                        ["Watch",n.watch],["Cyber",n.cyber]]
+                        ["Watch",n.watch],["Cyber",n.cyber],["Internships",n.intern]]
     .map(([k,v,hl])=>`<div class="stat ${hl||""}"><b>${v}</b><span>${k}</span></div>`).join("");
 }
 function render(){
@@ -415,6 +418,7 @@ function render(){
       ${j.first_seen===TODAY?'<span class="badge new">NEW</span>':""}
       ${j.priority?'<span class="badge pri">⭐ PRIORITY</span>':""}
       ${j.tier==="watch"?'<span class="badge watch">VERIFY LEVEL</span>':""}
+      ${/intern/i.test(j.title)?'<span class="badge intern">INTERNSHIP</span>':""}
       <span class="chip ${j.track}">${j.track==="cyber"?"CYBER":j.track==="swe"?"SWE":"TECH"}</span>
       <span class="who">${esc(j.company)} · first seen ${j.first_seen}</span>
     </div>
@@ -794,6 +798,8 @@ def main():
             lines.append(f"== {label} ==")
             for j in tjs:
                 star = "  [PRIORITY]" if j["company"].lower() in PRIORITY_COMPANIES else ""
+                if INTERN.search(j["title"]):
+                    star += "  [INTERNSHIP]"
                 lines.append(f"* {j['company']} - {j['title']}{star}")
                 lines.append(f"  {j['location']} | posted {j['posted'] or 'n/a'}")
                 lines.append(f"  {j['url']}")
@@ -803,7 +809,10 @@ def main():
         lines.append(f"-- \n{len(matched)} role(s) tracked in total. "
                      f"Full log: docs/index.html in the job-screener repo.")
         body = "\n".join(lines)
-        subject = f"NEW fresher jobs - {len(new_jobs)} found - {today}"
+        n_int = sum(1 for j in new_jobs if INTERN.search(j["title"]))
+        subject = (f"NEW fresher jobs - {len(new_jobs)} found"
+                   + (f" (incl. {n_int} internship)" if n_int else "")
+                   + f" - {today}")
     else:
         body = (f"No new fresher jobs available today ({today}).\n\n"
                 f"Still being tracked: {len(matched)} role(s) from earlier days "
