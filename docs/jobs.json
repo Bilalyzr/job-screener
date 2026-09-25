@@ -9,7 +9,7 @@
    "posted": "2026-07-10",
    "track": "swe",
    "first_seen": "2026-09-22",
-   "last_seen": "2026-09-24",
+   "last_seen": "2026-09-25",
    "priority": true,
    "reqs": "    - A strong fundamental understanding of computer science through pursuit of a Bachelor’s or Master’s degree in computer science, math, or a related discipline.&nbsp;\n    - Experience and familiarity with programming, either through side projects or classwork. We work mostly in Ruby, Java, Javascript, Go, and Scala. We believe new programming languages can be learned if the fundamentals and general knowledge are present.\n    - Experience from previous internships or other multi-person projects, including open source contributions, that demonstrate evaluating and receiving feedback from mentors, peers, and stakeholders.\n    - Ability to learn unfamiliar systems and form an understanding of those systems, through independent research and working with a mentor or subject matter experts.&nbsp;\n    - Ability to leverage AI tools to accelerate development while applying rigorous critical th",
    "tier": "fresher"
@@ -23,7 +23,7 @@
    "posted": "2026-08-31",
    "track": "swe",
    "first_seen": "2026-09-22",
-   "last_seen": "2026-09-24",
+   "last_seen": "2026-09-25",
    "priority": false,
    "reqs": "    - Experience: 0–2 years of experience in Business Analysis, Systems Analysis, Quality Assurance, or a related technology role.\n    - Salesforce &amp; Data Management: Basic experience with Salesforce platform configuration and familiarity with data loading tools (e.g., Salesforce Data Loader, Workbench, or Import Wizard).\n    - Technical Aptitude: Understanding of software delivery lifecycles, basic API testing concepts (e.g., Postman), database fundamentals, and data integrity verification.\n    - Problem-Solving: Analytical mindset with a passion for troubleshooting production issues and performing root-cause analysis.\n    - Communication &amp; Collaboration: Strong communication skills with an eagerness to learn from senior engineers and partner effectively across business and technical teams.\n    - ZoomInfo is committed to protecting your privacy when you apply for jobs with us. P",
    "tier": "fresher"
@@ -37,7 +37,7 @@
    "posted": "2026-09-08",
    "track": "swe",
    "first_seen": "2026-09-22",
-   "last_seen": "2026-09-24",
+   "last_seen": "2026-09-25",
    "priority": false,
    "reqs": "    - 0–2 years of experience in Business Analysis, Systems Analysis, Quality Assurance, or a related technology role.\n    - Salesforce &amp; Data Management:\n    - Basic experience with Salesforce platform configuration and familiarity with data loading tools (e.g., Salesforce Data Loader, Workbench, or Import Wizard).\n    - Understanding of software delivery lifecycles, basic API testing concepts (e.g., Postman), database fundamentals, and data integrity verification.\n    - &nbsp;Analytical mindset with a passion for troubleshooting production issues and performing root-cause analysis.\n    - Communication &amp; Collaboration:\n    - &nbsp;Strong communication skills with an eagerness to learn from senior engineers and partner effectively across business and technical teams.\n    - Bachelor’s of Science in Computer Science/Electronics or similar engineering/technical disciplines from a go",
    "tier": "fresher"
@@ -51,7 +51,7 @@
    "posted": "2026-09-06",
    "track": "swe",
    "first_seen": "2026-09-22",
-   "last_seen": "2026-09-24",
+   "last_seen": "2026-09-25",
    "priority": false,
    "reqs": "    - Interns are self-starters, driven, and can manage themselves.&nbsp; Bottom line, if you have a limitless drive and like to win, we want to talk to you - come make history!&nbsp;\n    - Bachelor’s or Master’s degree, preferably in Computer Science\n    - Proficiency in one or more general-purpose object-oriented programming languages like Java, C/C++, Scala, Python\n    - Minimum eligibility criteria\n    - 2027 graduates of Circuital branches only\n    - Available from January 2027 to May 2027 in Pune for the onsite internship (No remote options)\n    - Join Us in Securing and Accelerating the World's AI Transformation\n    - Linkedin | X (formerly Twitter) | Instagram |&nbsp; Rubrik.com\n    - At Rubrik, we are dedicated to fostering a culture where people from all backgrounds are valued, feel they belong, and believe they can succeed. Our commitment to inclusion is at the heart of our mi",
    "tier": "fresher"
@@ -65,7 +65,7 @@
    "posted": "2026-09-06",
    "track": "swe",
    "first_seen": "2026-09-22",
-   "last_seen": "2026-09-24",
+   "last_seen": "2026-09-25",
    "priority": false,
    "reqs": "    - Rubrik Software Engineer - Interns are self-starters, driven, and can manage themselves.&nbsp; Bottom line, if you have a limitless drive and like to win, we want to talk to you - come make history!&nbsp;\n    - Bachelor’s or Master’s degree or equivalent in computer science or related field\n    - Proficiency in one or more general-purpose programming languages like Java, C/C++, Scala, Python\n    - Minimum eligibility criteria\n    - 2027 graduates of Circuital branches only\n    - Available from January 2027 to May 2027 in Bangalore for the onsite internship (No remote options)\n    - Join Us in Securing and Accelerating the World's AI Transformation\n    - Linkedin | X (formerly Twitter) | Instagram |&nbsp; Rubrik.com\n    - At Rubrik, we are dedicated to fostering a culture where people from all backgrounds are valued, feel they belong, and believe they can succeed. Our commitment to ",
    "tier": "fresher"
@@ -80,7 +80,7 @@
    "track": "swe",
    "tier": "watch",
    "first_seen": "2026-09-22",
-   "last_seen": "2026-09-24",
+   "last_seen": "2026-09-25",
    "priority": false,
    "reqs": "    - Strong hands-on programming skills in Golang .\n    - Deep, practical knowledge of identity protocols: OIDC/OAuth 2.0 and SAML 2.0 — including token/assertion internals, standard flows, and failure modes.\n    - Working knowledge of Active Directory .\n    - Applied cryptography/PKI experience: X.509, JWT/JWKS, key rotation, TLS .\n    - Strong security engineering discipline — comfortable reasoning about threat models and building software to protect mission-critical systems, not just make features work.\n    - Solid understanding of OS fundamentals, networking, and concurrency.\n    - Working knowledge of Linux; comfortable writing shell/bash scripts.\n    - Simple, effective written and verbal communication.\n    - Directory internals (schema, bind operations).\n    - HTTP internals and reverse proxying (TLS, header injection)."
   },
@@ -127,5 +127,5 @@
    "reqs": "    - Build Java and Spring Boot microservices, REST APIs, and Kafka-based event-driven integrations.\n    - Apply object-oriented design, SOLID principles, reusable patterns, and secure coding practices.\n    - Create unit, component, integration, and regression tests and participate in peer reviews.\n    - Troubleshoot application, data, messaging, performance, and production issues.\n    - Contribute to CI/CD, observability, operational readiness, resiliency, and automation.\n    - Collaborate with product, architecture, testing, operations, and dependent engineering teams.\n    - Hands-on Java and Spring Boot development experience.\n    - Experience with microservices, REST APIs, Kafka or similar messaging platforms, and event-driven architecture.\n    - Knowledge of SQL or NoSQL databases, Git, automated testing, CI/CD, containers, and cloud-native platforms.\n    - Understanding of secure,"
   }
  ],
- "updated": "2026-09-24 10:05"
+ "updated": "2026-09-25 08:49"
 }
