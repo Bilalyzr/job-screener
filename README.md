@@ -12,6 +12,7 @@ extracts the key requirements from each posting, and emails you a daily report.
    - 13 Greenhouse job boards: Stripe, Cloudflare, Elastic, Twilio, Dropbox,
      Discord, Netskope, Okta, PagerDuty, Zscaler, Datadog, ZoomInfo, Rubrik
    - Mastercard's Phenom careers site (via sitemap + JSON-LD `JobPosting` blocks)
+   - PwC global careers (recent-jobs RSS feed with full descriptions)
 2. **Filters strictly to fresher roles** — a job qualifies only if its title
    carries an explicit marker (intern / graduate / trainee / campus / new grad /
    entry-level / Engineer I / Analyst I / Associate Analyst) or the JD text
