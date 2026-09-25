@@ -309,7 +309,6 @@ input:hover,select:hover{border-color:var(--line-hi)}
 .badge.pri{background:#33270e;color:var(--accent)}
 .badge.watch{background:#33250f;color:var(--warn)}
 .badge.intern{background:#10233b;color:#7fabff}
-.badge.tech{background:#2b2b31;color:#9aa5c3}
 .chip{font-size:var(--fs-12);padding:2px var(--sp-2);border-radius:999px;border:1px solid}
 .chip.swe{color:#7fabff;border-color:#2c4a86}
 .chip.cyber{color:#6fe0ad;border-color:#1f5c41}
@@ -366,7 +365,6 @@ footer a{color:var(--primary)}
   <select id="tier" aria-label="Filter by experience level">
     <option value="">All levels</option><option value="fresher">Fresher (mailed)</option>
     <option value="watch">Watch — verify level</option>
-    <option value="tech">All SWE / Cyber (any level)</option>
   </select>
   <select id="cmp" aria-label="Filter by company"><option value="">All companies</option></select>
   <label class="check"><input type="checkbox" id="newonly"> New today only</label>
@@ -395,14 +393,12 @@ function sources(){
 }
 function stats(){
   const n={total:JOBS.length,new:JOBS.filter(j=>j.first_seen===TODAY).length,
-           fres:JOBS.filter(j=>j.tier==="fresher").length,
+           fres:JOBS.filter(j=>j.tier!=="watch").length,
            watch:JOBS.filter(j=>j.tier==="watch").length,
            cyber:JOBS.filter(j=>j.track==="cyber").length,
-           intern:JOBS.filter(j=>/intern/i.test(j.title)).length,
-           tech:JOBS.filter(j=>j.tier==="tech").length};
+           intern:JOBS.filter(j=>/intern/i.test(j.title)).length};
   $("stats").innerHTML=[["Tracked",n.total],["New today",n.new,"hl"],["Fresher",n.fres],
-                        ["Watch",n.watch],["Cyber",n.cyber],["Internships",n.intern],
-                        ["SWE/Cyber all",n.tech]]
+                        ["Watch",n.watch],["Cyber",n.cyber],["Internships",n.intern]]
     .map(([k,v,hl])=>`<div class="stat ${hl||""}"><b>${v}</b><span>${k}</span></div>`).join("");
 }
 function render(){
@@ -413,8 +409,7 @@ function render(){
         (!q||(j.title+j.company+j.location).toLowerCase().includes(q)));
   js.sort((a,b)=>{
     if($("pri").checked&&!!b.priority!=!!a.priority)return a.priority?-1:1;
-    const R={fresher:0,watch:1,tech:2};
-    if((R[a.tier]??2)!==(R[b.tier]??2))return (R[a.tier]??2)-(R[b.tier]??2);
+    if((a.tier==="watch")!==(b.tier==="watch"))return a.tier==="watch"?1:-1;
     return (b.first_seen||"").localeCompare(a.first_seen||"")||a.company.localeCompare(b.company);});
   $("count").textContent=`Showing ${js.length} of ${JOBS.length} tracked roles`;
   $("list").innerHTML=js.length?js.map(j=>`
@@ -423,7 +418,6 @@ function render(){
       ${j.first_seen===TODAY?'<span class="badge new">NEW</span>':""}
       ${j.priority?'<span class="badge pri">⭐ PRIORITY</span>':""}
       ${j.tier==="watch"?'<span class="badge watch">VERIFY LEVEL</span>':""}
-      ${j.tier==="tech"?'<span class="badge tech">NON-FRESHER</span>':""}
       ${/intern/i.test(j.title)?'<span class="badge intern">INTERNSHIP</span>':""}
       <span class="chip ${j.track}">${j.track==="cyber"?"CYBER":j.track==="swe"?"SWE":"TECH"}</span>
       <span class="who">${esc(j.company)} · first seen ${j.first_seen}</span>
@@ -506,9 +500,9 @@ def load_db():
     return {"jobs": []}
 
 
-def update_db(db, matched, watch, tech_tier, today):
+def update_db(db, matched, watch, today):
     by_key = {j["key"]: j for j in db["jobs"]}
-    for tier, jobs in (("fresher", matched), ("watch", watch), ("tech", tech_tier)):
+    for tier, jobs in (("fresher", matched), ("watch", watch)):
         for j in jobs:
             pri = j["company"].lower() in PRIORITY_COMPANIES
             rec = by_key.get(j["key"])
@@ -525,11 +519,7 @@ def update_db(db, matched, watch, tech_tier, today):
                     "priority": pri,
                     "reqs": extract_requirements(j.get("desc", "")) if j.get("desc") else "",
                 }
-    # tech-tier records are transient listings — retire them after 14 days unseen
-    cutoff = date.today().toordinal() - 14
-    db["jobs"] = [j for j in by_key.values()
-                  if j.get("tier") != "tech"
-                  or date.fromisoformat(j.get("last_seen", today)).toordinal() >= cutoff]
+    db["jobs"] = list(by_key.values())
     db["updated"] = datetime.now().strftime("%Y-%m-%d %H:%M")
     return db
 
@@ -702,23 +692,7 @@ def main():
     watch = kept
     near_miss = watch[:6]
 
-    # tech tier (UI-only, never mailed): ALL India software/web-dev and cyber
-    # roles from every monitored company, any level — so zero-fresher companies
-    # still show what they are hiring for. Capped per company to stay readable.
-    tech_tier = [j for j in all_jobs
-                 if j.get("title") and INDIA.search(j.get("location") or "")
-                 and (SWE.search(j["title"]) or CYBER.search(j["title"]))
-                 and not EXCLUDE.search(j["title"])
-                 and j["key"] not in {m["key"] for m in matched + watch}]
-    _cap = {}
-    _capped = []
-    for j in tech_tier:
-        _cap[j["company"]] = _cap.get(j["company"], 0) + 1
-        if _cap[j["company"]] <= 12:
-            _capped.append(j)
-    tech_tier = _capped
-
-    for j in matched + watch + tech_tier:
+    for j in matched + watch:
         j["track"] = classify(j)
 
     # state / diff
@@ -805,10 +779,9 @@ def main():
 
     # ---- UI: cumulative job log (docs/index.html) — every mailed job lands here
     try:
-        db = update_db(load_db(), matched, watch, tech_tier, today)
+        db = update_db(load_db(), matched, watch, today)
         idx = write_site(db, today)
-        print(f"[screener] ui: {idx} "
-              f"(fresher={len(matched)} watch={len(watch)} tech={len(tech_tier)})")
+        print(f"[screener] ui: {idx} (fresher={len(matched)} watch={len(watch)})")
     except Exception as e:
         print(f"[screener] ui failed: {e}")
 
