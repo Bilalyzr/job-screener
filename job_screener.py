@@ -44,6 +44,8 @@ PHENOM_SITES = {
 # top product-based targets: their roles sort first in mail + UI
 PRIORITY_COMPANIES = {"mastercard", "stripe", "visa", "paypal"}
 DOCS = ROOT / "docs"
+# PwC global careers publishes a recent-jobs RSS feed (full JDs included)
+PWC_RSS = "https://careers.pwc.com/sitemap-index.xml"
 
 # ------------------------------------------------------------- filters -----
 INDIA = re.compile(r"(india|bangalore|bengaluru|hyderabad|chennai|pune|mumbai|"
@@ -523,6 +525,32 @@ def push_site(today):
     return "site push: ok"
 
 
+# ------------------------------------------------------------------ pwc -----
+def fetch_pwc():
+    """PwC recent-jobs RSS: title carries '(City, CC)'; description = full JD."""
+    raw = fetch(PWC_RSS, timeout=30).decode("utf-8", "replace")
+    jobs = []
+    for it in re.findall(r"<item>(.*?)</item>", raw, re.S):
+        t = re.search(r"<title>(.*?)</title>", it, re.S)
+        l = re.search(r"<link>(.*?)</link>", it, re.S)
+        gid = re.search(r"<g:id>(.*?)</g:id>", it, re.S)
+        d = re.search(r"<description><!\[CDATA\[(.*?)\]\]></description>", it, re.S)
+        if not (t and l):
+            continue
+        full = htmllib.unescape(t.group(1)).strip()
+        m = re.match(r"(.+?)\s*\(([^,()]+,\s*[A-Za-z]{2})\)\s*$", full)
+        jobs.append({
+            "key": f"pwc:{gid.group(1) if gid else l.group(1).rstrip('/').rsplit('/', 1)[-1]}",
+            "company": "PwC",
+            "title": (m.group(1).strip() if m else full),
+            "location": (m.group(2).strip() if m else ""),
+            "url": l.group(1).strip(),
+            "posted": "",
+            "desc": strip_html(htmllib.unescape(d.group(1))) if d else "",
+        })
+    return jobs
+
+
 # ------------------------------------------------------------- pipeline ----
 def classify(job):
     t = job["title"]
@@ -582,6 +610,11 @@ def main():
             all_jobs += fetch_phenom(name, base)
         except Exception as e:
             errors.append(f"phenom/{name}: {e}")
+
+    try:
+        all_jobs += fetch_pwc()
+    except Exception as e:
+        errors.append(f"pwc: {e}")
 
     matched = [j for j in all_jobs if j.get("title") and is_match(j)]
 
