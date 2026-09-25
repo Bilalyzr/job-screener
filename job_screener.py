@@ -281,6 +281,13 @@ h1 em{color:var(--accent);font-style:normal}
 .stat b{display:block;font-size:var(--fs-28);font-weight:700;line-height:1.2}
 .stat span{font-size:var(--fs-12);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 .stat.hl b{color:var(--ok)}
+.srcs-label{font-size:var(--fs-12);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--sp-2)}
+.sources{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-6)}
+.src{display:inline-flex;align-items:center;gap:var(--sp-1);min-height:44px;padding:0 var(--sp-4);font-size:var(--fs-14);color:var(--text);background:var(--surface);border:1px solid var(--line);border-radius:999px;cursor:pointer}
+.src:hover{border-color:var(--line-hi)}
+.src .n{color:var(--muted);font-size:var(--fs-12)}
+.src.dim{color:var(--muted)}
+.src.on{border-color:var(--primary);color:var(--primary)}
 .toolbar{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-4)}
 input,select{min-height:44px;background:var(--surface);border:1px solid var(--line);color:var(--text);border-radius:var(--rad-s);padding:0 var(--sp-3);font-size:var(--fs-14)}
 input{min-width:240px}
@@ -345,6 +352,8 @@ footer a{color:var(--primary)}
   <div class="updated">Updated __UPDATED__</div>
 </header>
 <section class="stats" id="stats" aria-label="Summary statistics"></section>
+<p class="srcs-label">Monitored companies — click to filter</p>
+<div class="sources" id="srcs" role="group" aria-label="All monitored companies"></div>
 <form class="toolbar" role="search" onsubmit="return false">
   <input id="q" type="search" aria-label="Search by title, company, or location" placeholder="Search title, company, location…">
   <select id="trk" aria-label="Filter by job track">
@@ -366,10 +375,20 @@ footer a{color:var(--primary)}
 <a href="https://github.com/Bilalyzr/job-screener">Bilalyzr/job-screener</a></footer>
 </div>
 <script>
-const JOBS=__DATA__,TODAY="__TODAY__";
+const JOBS=__DATA__,SOURCES=__SOURCES__,TODAY="__TODAY__";
 const $=id=>document.getElementById(id);
+const PRIORITY=["mastercard","stripe","visa","paypal"];
 [...new Set(JOBS.map(j=>j.company))].sort().forEach(c=>{const o=document.createElement("option");o.textContent=c;$("cmp").appendChild(o);});
 const esc=s=>(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function sources(){
+  const counts={};JOBS.forEach(j=>counts[j.company]=(counts[j.company]||0)+1);
+  const sel=$("cmp").value;
+  $("srcs").innerHTML=SOURCES.map(c=>{
+    const n=counts[c]||0;
+    const star=PRIORITY.includes(c.toLowerCase())?"⭐ ":"";
+    return `<button type="button" class="src ${n?"":"dim"} ${sel===c?"on":""}" data-c="${esc(c)}" title="${n} tracked role${n===1?"":"s"}">${star}${esc(c)} <span class="n">${n}</span></button>`;
+  }).join("");
+}
 function stats(){
   const n={total:JOBS.length,new:JOBS.filter(j=>j.first_seen===TODAY).length,
            fres:JOBS.filter(j=>j.tier!=="watch").length,
@@ -411,6 +430,7 @@ function render(){
   if(r)r.onclick=()=>{$("q").value="";$("trk").value="";$("tier").value="";
     $("cmp").value="";$("newonly").checked=false;render();};
   stats();
+  sources();
   const ctx=[cmp?`company: ${cmp}`:"",trk?`track: ${trk}`:"",
              tier?`level: ${tier}`:"",no?"new today only":""]
     .filter(Boolean).join(" · ");
@@ -455,6 +475,11 @@ function buildRadar(js,ctx){
   $("radar").innerHTML=h;
 }
 ["q","trk","tier","cmp","newonly","pri"].forEach(id=>$(id).addEventListener("input",render));
+$("srcs").addEventListener("click",e=>{
+  const b=e.target.closest(".src");if(!b)return;
+  $("cmp").value=$("cmp").value===b.dataset.c?"":b.dataset.c;
+  render();
+});
 render();
 </script>
 </body></html>
@@ -495,12 +520,21 @@ def update_db(db, matched, watch, today):
     return db
 
 
+def monitored_companies():
+    names = set(GREENHOUSE_BOARDS.values())
+    names |= {n.title() for n in PHENOM_SITES}
+    names.add("PwC")
+    return sorted(names)
+
+
 def write_site(db, today):
     DOCS.mkdir(exist_ok=True)
     (DOCS / "jobs.json").write_text(
         json.dumps(db, indent=1, ensure_ascii=False), encoding="utf-8")
     page = (INDEX_TMPL
             .replace("__DATA__", json.dumps(db["jobs"], ensure_ascii=False))
+            .replace("__SOURCES__", json.dumps(monitored_companies(),
+                                               ensure_ascii=False))
             .replace("__UPDATED__", db.get("updated", ""))
             .replace("__TODAY__", today))
     (DOCS / "index.html").write_text(page, encoding="utf-8")
