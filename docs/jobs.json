@@ -139,7 +139,21 @@
    "last_seen": "2026-09-29",
    "priority": true,
    "reqs": "    - We are looking for a technically strong and collaborative Software Engineer who thrives\n    - in a complex, enterprise-scale environment.\n    - Key requirements include:\n    - Experience with Java-based development\n    - Exposure to Spring-Boot framework\n    - Experience of TDD and BDD testing frameworks (JUnit, Selenium, Cucumber, etc.)\n    - Experience of frontend technologies such as Angular and JavaScript\n    - Familiarity with SQL scripting and data handling\n    - Familiar with Agile/Scrum methodologies, ideally within SAFe\n    - Strong problem-solving skills and ownership mindset"
+  },
+  {
+   "key": "gh:8237463",
+   "company": "Elastic",
+   "title": "Platform Engineer - Kubernetes",
+   "location": "Bangalore, India",
+   "url": "https://jobs.elastic.co/jobs?gh_jid=8237463&gh_jid=8237463",
+   "posted": "2026-09-29",
+   "track": "swe",
+   "tier": "watch",
+   "first_seen": "2026-09-29",
+   "last_seen": "2026-09-29",
+   "priority": false,
+   "reqs": "    - requirements for platform improvements. Provide technical support and guidance to internal users of the platform. Facilitate knowledge sharing sessions to educate team members on platform features and best practices.\n    - Bachelor's degree in Computer Science or equivalent experience\n    - 5+ years with infrastructure as code tools like Terraform or Crossplane\n    - 5+ years with cloud service providers like AWS, Azure, or Google Cloud\n    - Kubernetes and Cloud Native Associate or equivalent certification\n    - Knowledge of service mesh architectures such as Istio or Linkerd\n    - Hands-on experience with cloud security practices and tools\n    - Experience with cost management tools for cloud infrastructure\n    - Led cross-functional initiatives that improved platform usability and performance based on user feedback\n    - Experience with Elasticsearch is a plus"
   }
  ],
- "updated": "2026-09-29 06:11"
+ "updated": "2026-09-29 09:49"
 }
