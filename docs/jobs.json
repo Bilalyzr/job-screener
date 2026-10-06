@@ -155,5 +155,5 @@
    "reqs": "    - requirements for platform improvements. Provide technical support and guidance to internal users of the platform. Facilitate knowledge sharing sessions to educate team members on platform features and best practices.\n    - Bachelor's degree in Computer Science or equivalent experience\n    - 5+ years with infrastructure as code tools like Terraform or Crossplane\n    - 5+ years with cloud service providers like AWS, Azure, or Google Cloud\n    - Kubernetes and Cloud Native Associate or equivalent certification\n    - Knowledge of service mesh architectures such as Istio or Linkerd\n    - Hands-on experience with cloud security practices and tools\n    - Experience with cost management tools for cloud infrastructure\n    - Led cross-functional initiatives that improved platform usability and performance based on user feedback\n    - Experience with Elasticsearch is a plus"
   }
  ],
- "updated": "2026-10-06 06:25"
+ "updated": "2026-10-06 06:51"
 }
