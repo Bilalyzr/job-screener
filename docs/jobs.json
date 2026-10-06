@@ -183,5 +183,5 @@
    "reqs": "    - What We Are Looking For\n    - Cloud Operations: Hands-on experience operating production services in AWS and/or GCP environments.\n    - Kubernetes Foundation: Solid, practical understanding of Kubernetes, container runtimes, and troubleshooting application workloads.\n    - Infrastructure as Code: Experience using Terraform and Helm to provision and manage cloud resources.\n    - Programming Skills: Proficiency in software development using Golang and/or Python.\n    - Networking Basics: Good understanding of cloud networking fundamentals, including DNS, load balancing, HTTPS/TLS, and basic traffic routing.\n    - Data Platforms: Familiarity operating and querying distributed data stores (e.g., PostgreSQL, Redis, OpenSearch).\n    - Observability: Hands-on experience configuring metrics, alerts, and dashboards on platforms like Datadog or Splunk.\n    - Operational Excellence\n    - Produ"
   }
  ],
- "updated": "2026-10-06 10:43"
+ "updated": "2026-10-06 11:20"
 }
