@@ -153,7 +153,35 @@
    "last_seen": "2026-10-06",
    "priority": false,
    "reqs": "    - requirements for platform improvements. Provide technical support and guidance to internal users of the platform. Facilitate knowledge sharing sessions to educate team members on platform features and best practices.\n    - Bachelor's degree in Computer Science or equivalent experience\n    - 5+ years with infrastructure as code tools like Terraform or Crossplane\n    - 5+ years with cloud service providers like AWS, Azure, or Google Cloud\n    - Kubernetes and Cloud Native Associate or equivalent certification\n    - Knowledge of service mesh architectures such as Istio or Linkerd\n    - Hands-on experience with cloud security practices and tools\n    - Experience with cost management tools for cloud infrastructure\n    - Led cross-functional initiatives that improved platform usability and performance based on user feedback\n    - Experience with Elasticsearch is a plus"
+  },
+  {
+   "key": "gh:8256407",
+   "company": "Rubrik",
+   "title": "Software Engineer- SaaS O365",
+   "location": "Bangalore ",
+   "url": "https://www.rubrik.com/company/careers/departments/job.8256407?gh_jid=8256407",
+   "posted": "2026-10-06",
+   "track": "swe",
+   "tier": "fresher",
+   "first_seen": "2026-10-06",
+   "last_seen": "2026-10-06",
+   "priority": false,
+   "reqs": "    - skills and attention to detail.&nbsp;&nbsp;\n    - Strong understanding of System Development Life Cycle (SDLC) methodology, design patterns, and software engineering principles\n    - Strong collaboration and communication skills.&nbsp; Ability to work independently or as part of a team on complex, time-sensitive projects.\n    - Join Us in Securing and Accelerating the World's AI Transformation\n    - Linkedin | X (formerly Twitter) | Instagram |&nbsp; Rubrik.com\n    - At Rubrik, we are dedicated to fostering a culture where people from all backgrounds are valued, feel they belong, and believe they can succeed. Our commitment to inclusion is at the heart of our mission to secure the world’s data.\n    - Our inclusion strategy focuses on three core areas of our business and culture:\n    - Our Company: We are committed to building a merit-based organization that offers equal access to g"
+  },
+  {
+   "key": "gh:8243101",
+   "company": "Okta",
+   "title": "Site Reliability Engineer",
+   "location": "Bengaluru, India",
+   "url": "https://www.okta.com/company/careers/opportunity/8243101?gh_jid=8243101",
+   "posted": "2026-10-06",
+   "track": "swe",
+   "tier": "watch",
+   "first_seen": "2026-10-06",
+   "last_seen": "2026-10-06",
+   "priority": false,
+   "reqs": "    - What We Are Looking For\n    - Cloud Operations: Hands-on experience operating production services in AWS and/or GCP environments.\n    - Kubernetes Foundation: Solid, practical understanding of Kubernetes, container runtimes, and troubleshooting application workloads.\n    - Infrastructure as Code: Experience using Terraform and Helm to provision and manage cloud resources.\n    - Programming Skills: Proficiency in software development using Golang and/or Python.\n    - Networking Basics: Good understanding of cloud networking fundamentals, including DNS, load balancing, HTTPS/TLS, and basic traffic routing.\n    - Data Platforms: Familiarity operating and querying distributed data stores (e.g., PostgreSQL, Redis, OpenSearch).\n    - Observability: Hands-on experience configuring metrics, alerts, and dashboards on platforms like Datadog or Splunk.\n    - Operational Excellence\n    - Produ"
   }
  ],
- "updated": "2026-10-06 06:51"
+ "updated": "2026-10-06 10:17"
 }
