@@ -712,7 +712,7 @@ def main():
         state[k]["last"] = today
     horizon = date.today().toordinal() - 30
     state = {k: v for k, v in state.items()
-             if not isinstance(v, dict)               # keep non-job markers (last_mail)
+             if not (isinstance(v, dict) and "last" in v)   # keep markers (last_mail, mailed)
              or date.fromisoformat(v["last"]).toordinal() >= horizon}
     STATE_FILE.write_text(json.dumps(state, indent=1), encoding="utf-8")
 
@@ -786,7 +786,22 @@ def main():
         print(f"[screener] ui failed: {e}")
 
     # ---- deliver: NEW jobs only; explicit "no new jobs" mail otherwise
-    new_jobs = [j for j in matched if j["is_new"]]
+    mailed = state.get("mailed") if isinstance(state.get("mailed"), dict) else {}
+    # mail-worthy = never mailed AND first seen within 3 days — catches jobs
+    # that appeared after an earlier same-day mail already went out
+    _recent = date.today().toordinal() - 3
+
+    def _mailworthy(j):
+        if j["key"] in mailed:
+            return False
+        st = state.get(j["key"])
+        first = st.get("first") if isinstance(st, dict) else None
+        try:
+            return first is None or date.fromisoformat(first).toordinal() >= _recent
+        except Exception:
+            return True
+
+    new_jobs = [j for j in matched if _mailworthy(j)]
     if new_jobs:
         lines = [f"NEW FRESHER JOBS - {today}", ""]
         for track, label in (("cyber", "Cyber Security"),
@@ -821,8 +836,8 @@ def main():
         subject = f"No new fresher jobs today - {today}"
     if "--no-mail" in sys.argv:
         print("[screener] mail skipped (--no-mail)")
-    elif state.get("last_mail") == today:
-        # a later run the same day (backup schedule / manual) must not re-mail
+    elif not new_jobs and state.get("last_mail") == today:
+        # already notified today and nothing unmailed — stay quiet
         print("[screener] email: sent earlier today (skipping duplicate)")
     else:
         try:
@@ -830,6 +845,11 @@ def main():
             print("[screener]", result)
             if result.startswith("email: sent"):
                 state["last_mail"] = today
+                horizon = date.today().toordinal() - 30
+                state["mailed"] = {k: v for k, v in mailed.items()
+                                   if date.fromisoformat(v).toordinal() >= horizon}
+                for j in new_jobs:
+                    state["mailed"][j["key"]] = today
                 STATE_FILE.write_text(json.dumps(state, indent=1),
                                       encoding="utf-8")
         except Exception as e:
