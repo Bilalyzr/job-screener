@@ -9,7 +9,7 @@
    "posted": "2026-07-10",
    "track": "swe",
    "first_seen": "2026-09-22",
-   "last_seen": "2026-10-21",
+   "last_seen": "2026-10-22",
    "priority": true,
    "reqs": "    - A strong fundamental understanding of computer science through pursuit of a Bachelor’s or Master’s degree in computer science, math, or a related discipline.&nbsp;\n    - Experience and familiarity with programming, either through side projects or classwork. We work mostly in Ruby, Java, Javascript, Go, and Scala. We believe new programming languages can be learned if the fundamentals and general knowledge are present.\n    - Experience from previous internships or other multi-person projects, including open source contributions, that demonstrate evaluating and receiving feedback from mentors, peers, and stakeholders.\n    - Ability to learn unfamiliar systems and form an understanding of those systems, through independent research and working with a mentor or subject matter experts.&nbsp;\n    - Ability to leverage AI tools to accelerate development while applying rigorous critical th",
    "tier": "fresher"
@@ -80,7 +80,7 @@
    "track": "swe",
    "tier": "watch",
    "first_seen": "2026-09-22",
-   "last_seen": "2026-10-21",
+   "last_seen": "2026-10-22",
    "priority": false,
    "reqs": "    - Strong hands-on programming skills in Golang .\n    - Deep, practical knowledge of identity protocols: OIDC/OAuth 2.0 and SAML 2.0 — including token/assertion internals, standard flows, and failure modes.\n    - Working knowledge of Active Directory .\n    - Applied cryptography/PKI experience: X.509, JWT/JWKS, key rotation, TLS .\n    - Strong security engineering discipline — comfortable reasoning about threat models and building software to protect mission-critical systems, not just make features work.\n    - Solid understanding of OS fundamentals, networking, and concurrency.\n    - Working knowledge of Linux; comfortable writing shell/bash scripts.\n    - Simple, effective written and verbal communication.\n    - Directory internals (schema, bind operations).\n    - HTTP internals and reverse proxying (TLS, header injection)."
   },
@@ -164,7 +164,7 @@
    "track": "swe",
    "tier": "fresher",
    "first_seen": "2026-10-06",
-   "last_seen": "2026-10-21",
+   "last_seen": "2026-10-22",
    "priority": false,
    "reqs": "    - skills and attention to detail.&nbsp;&nbsp;\n    - Strong understanding of System Development Life Cycle (SDLC) methodology, design patterns, and software engineering principles\n    - Strong collaboration and communication skills.&nbsp; Ability to work independently or as part of a team on complex, time-sensitive projects.\n    - Join Us in Securing and Accelerating the World's AI Transformation\n    - Linkedin | X (formerly Twitter) | Instagram |&nbsp; Rubrik.com\n    - At Rubrik, we are dedicated to fostering a culture where people from all backgrounds are valued, feel they belong, and believe they can succeed. Our commitment to inclusion is at the heart of our mission to secure the world’s data.\n    - Our inclusion strategy focuses on three core areas of our business and culture:\n    - Our Company: We are committed to building a merit-based organization that offers equal access to g"
   },
@@ -192,7 +192,7 @@
    "track": "swe",
    "tier": "fresher",
    "first_seen": "2026-10-07",
-   "last_seen": "2026-10-21",
+   "last_seen": "2026-10-22",
    "priority": false,
    "reqs": "    - skills and attention to detail.&nbsp;&nbsp;\n    - Strong understanding of System Development Life Cycle (SDLC) methodology, design patterns, and software engineering principles\n    - Strong collaboration and communication skills.&nbsp; Ability to work independently or as part of a team on complex, time-sensitive projects.\n    - Join Us in Securing and Accelerating the World's AI Transformation\n    - Linkedin | X (formerly Twitter) | Instagram |&nbsp; Rubrik.com\n    - At Rubrik, we are dedicated to fostering a culture where people from all backgrounds are valued, feel they belong, and believe they can succeed. Our commitment to inclusion is at the heart of our mission to secure the world’s data.\n    - Our inclusion strategy focuses on three core areas of our business and culture:\n    - Our Company: We are committed to building a merit-based organization that offers equal access to g"
   },
@@ -220,7 +220,7 @@
    "track": "cyber",
    "tier": "watch",
    "first_seen": "2026-10-15",
-   "last_seen": "2026-10-21",
+   "last_seen": "2026-10-22",
    "priority": true,
    "reqs": "    - We are looking for a technically strong and collaborative Software Engineer who thrives in a complex, enterprise-scale environment.\n    - Key requirements include:\n    - Proven experience with enterprise CI/CD and Release engineering\n    - Proven experience with Ansible and Atlassian tools\n    - Knowledge of Infrastructure as Code\n    - Experience with Scripting and Automation (API integration, Python, Groovy)\n    - Knowledge of observability and monitoring tools\n    - Work experience on Linux\n    - Experience working within Agile/Scrum environments, ideally within SAFe\n    - Strong problem-solving skills and ownership mindset"
   },
@@ -234,7 +234,7 @@
    "track": "swe",
    "tier": "watch",
    "first_seen": "2026-10-15",
-   "last_seen": "2026-10-21",
+   "last_seen": "2026-10-22",
    "priority": true,
    "reqs": "    - We are looking for a technically strong and collaborative Software Engineer who thrives in a complex, enterprise-scale environment.\n    - Key requirements include:\n    - Proven experience with Java-based backend development and relational databases (Oracle)\n    - Experience with Spring-Boot framework\n    - Knowledge of TDD and BDD testing frameworks\n    - Working knowledge of frontend technologies such as Angular and JavaScript\n    - Familiarity with SQL scripting and data handling\n    - Exposure to Devops tooling\n    - Experience working within Agile/Scrum environments, ideally within SAFe\n    - Strong problem-solving skills and ownership mindset"
   },
@@ -248,7 +248,7 @@
    "track": "swe",
    "tier": "watch",
    "first_seen": "2026-10-15",
-   "last_seen": "2026-10-21",
+   "last_seen": "2026-10-22",
    "priority": false,
    "reqs": "    - What We’re Looking for (Minimum Qualifications)\n    - Foundational understanding of AI/ML technologies and experience leveraging, securing, or positioning AI-driven solutions to optimize outcomes within your functional domain and experience with agentic AI systems and orchestration workflows\n    - 2+ years of experience in Java coding in a highly distributed and enterprise-scale environment\n    - Working knowledge of cloud infrastructure services on AWS or Azure\n    - Strong experience with distributed systems and microservices architecture\n    - Strong database knowledge of SQL constructs and data modeling\n    - Strong experience with Identity governance and administration, Access Management\n    - What Will Make You Stand Out (Preferred Qualifications)\n    - Experience leveraging AI coding assistants, automated code review tooling, or LLM-assisted development workflows to optimize"
   },
@@ -276,10 +276,10 @@
    "track": "swe",
    "tier": "watch",
    "first_seen": "2026-10-21",
-   "last_seen": "2026-10-21",
+   "last_seen": "2026-10-22",
    "priority": false,
    "reqs": "    - qualifications you’ll need\n    - Rubrik Software Engineers are self-starters, driven, and can manage themselves. Bottom line,if you have a limitless drive and like to win, we want to talk to you - come make history!\n    - Bachelor’s or Master’s degree or equivalent in computer science or related field\n    - 6 months - 1 year of relevant work experience\n    - Proficiency in one or more general purpose programming languages like Java, C/C++, Scala, Python, C#. Having prior experience with C++ would be a plus.&nbsp;\n    - Experience with Google Cloud Platform/AWS/Azure or other public cloud technologies is a plus\n    - Experience working with two or more from the following: Unix/Linux environments, Windows environments, distributed systems, networking, developing large software systems, file systems, storage systems, hypervisors, databases and/or security software development.\n    - K"
   }
  ],
- "updated": "2026-10-21 09:24"
+ "updated": "2026-10-22 00:15"
 }
