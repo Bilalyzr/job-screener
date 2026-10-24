@@ -2,7 +2,7 @@
  "gh:8031833": {
   "first": "2026-09-22",
   "title": "Software Engineer, Intern",
-  "last": "2026-10-23"
+  "last": "2026-10-24"
  },
  "gh:8166537": {
   "first": "2026-09-22",
@@ -24,7 +24,7 @@
   "title": "Software Engineer I - Salesforce Support",
   "last": "2026-10-01"
  },
- "last_mail": "2026-10-23",
+ "last_mail": "2026-10-24",
  "gh:8256407": {
   "first": "2026-10-06",
   "title": "Software Engineer- SaaS O365",
@@ -33,13 +33,14 @@
  "gh:8258200": {
   "first": "2026-10-07",
   "title": "Software Engineer - Cloud: Azure",
-  "last": "2026-10-23"
+  "last": "2026-10-24"
  },
  "mailed": {
   "gh:8258200": "2026-10-07",
   "gh:8256407": "2026-10-07",
   "ph:R-290797": "2026-10-13",
-  "ph:R-293576": "2026-10-16"
+  "ph:R-293576": "2026-10-16",
+  "ph:R-294544": "2026-10-24"
  },
  "ph:R-290797": {
   "first": "2026-10-13",
@@ -50,5 +51,10 @@
   "first": "2026-10-16",
   "title": "Software Engineer I-1",
   "last": "2026-10-21"
+ },
+ "ph:R-294544": {
+  "first": "2026-10-24",
+  "title": "Software Engineer I - Java Full Stack React/Angular",
+  "last": "2026-10-24"
  }
 }
