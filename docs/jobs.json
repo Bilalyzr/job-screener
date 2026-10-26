@@ -9,7 +9,7 @@
    "posted": "2026-07-10",
    "track": "swe",
    "first_seen": "2026-09-22",
-   "last_seen": "2026-10-25",
+   "last_seen": "2026-10-26",
    "priority": true,
    "reqs": "    - A strong fundamental understanding of computer science through pursuit of a Bachelor’s or Master’s degree in computer science, math, or a related discipline.&nbsp;\n    - Experience and familiarity with programming, either through side projects or classwork. We work mostly in Ruby, Java, Javascript, Go, and Scala. We believe new programming languages can be learned if the fundamentals and general knowledge are present.\n    - Experience from previous internships or other multi-person projects, including open source contributions, that demonstrate evaluating and receiving feedback from mentors, peers, and stakeholders.\n    - Ability to learn unfamiliar systems and form an understanding of those systems, through independent research and working with a mentor or subject matter experts.&nbsp;\n    - Ability to leverage AI tools to accelerate development while applying rigorous critical th",
    "tier": "fresher"
@@ -80,7 +80,7 @@
    "track": "swe",
    "tier": "watch",
    "first_seen": "2026-09-22",
-   "last_seen": "2026-10-25",
+   "last_seen": "2026-10-26",
    "priority": false,
    "reqs": "    - Strong hands-on programming skills in Golang .\n    - Deep, practical knowledge of identity protocols: OIDC/OAuth 2.0 and SAML 2.0 — including token/assertion internals, standard flows, and failure modes.\n    - Working knowledge of Active Directory .\n    - Applied cryptography/PKI experience: X.509, JWT/JWKS, key rotation, TLS .\n    - Strong security engineering discipline — comfortable reasoning about threat models and building software to protect mission-critical systems, not just make features work.\n    - Solid understanding of OS fundamentals, networking, and concurrency.\n    - Working knowledge of Linux; comfortable writing shell/bash scripts.\n    - Simple, effective written and verbal communication.\n    - Directory internals (schema, bind operations).\n    - HTTP internals and reverse proxying (TLS, header injection)."
   },
@@ -192,7 +192,7 @@
    "track": "swe",
    "tier": "fresher",
    "first_seen": "2026-10-07",
-   "last_seen": "2026-10-25",
+   "last_seen": "2026-10-26",
    "priority": false,
    "reqs": "    - skills and attention to detail.&nbsp;&nbsp;\n    - Strong understanding of System Development Life Cycle (SDLC) methodology, design patterns, and software engineering principles\n    - Strong collaboration and communication skills.&nbsp; Ability to work independently or as part of a team on complex, time-sensitive projects.\n    - Join Us in Securing and Accelerating the World's AI Transformation\n    - Linkedin | X (formerly Twitter) | Instagram |&nbsp; Rubrik.com\n    - At Rubrik, we are dedicated to fostering a culture where people from all backgrounds are valued, feel they belong, and believe they can succeed. Our commitment to inclusion is at the heart of our mission to secure the world’s data.\n    - Our inclusion strategy focuses on three core areas of our business and culture:\n    - Our Company: We are committed to building a merit-based organization that offers equal access to g"
   },
@@ -248,7 +248,7 @@
    "track": "swe",
    "tier": "watch",
    "first_seen": "2026-10-15",
-   "last_seen": "2026-10-25",
+   "last_seen": "2026-10-26",
    "priority": false,
    "reqs": "    - What We’re Looking for (Minimum Qualifications)\n    - Foundational understanding of AI/ML technologies and experience leveraging, securing, or positioning AI-driven solutions to optimize outcomes within your functional domain and experience with agentic AI systems and orchestration workflows\n    - 2+ years of experience in Java coding in a highly distributed and enterprise-scale environment\n    - Working knowledge of cloud infrastructure services on AWS or Azure\n    - Strong experience with distributed systems and microservices architecture\n    - Strong database knowledge of SQL constructs and data modeling\n    - Strong experience with Identity governance and administration, Access Management\n    - What Will Make You Stand Out (Preferred Qualifications)\n    - Experience leveraging AI coding assistants, automated code review tooling, or LLM-assisted development workflows to optimize"
   },
@@ -290,10 +290,10 @@
    "track": "swe",
    "tier": "fresher",
    "first_seen": "2026-10-24",
-   "last_seen": "2026-10-25",
+   "last_seen": "2026-10-26",
    "priority": true,
    "reqs": "    - requirements and solution designs, with guidance from senior engineers.\n    - Participate in development within a CI/CD-enabled environment (e.g., PCF or similar cloud platforms).\n    - Work with data persistence technologies (RDBMS, NoSQL such as Cassandra) under guidance.\n    - Follow established coding standards, testing practices, and quality gates.\n    - Debug issues and contribute to defect resolution and system stability.\n    - Collaborate with cross-functional teams to support smooth project delivery.\n    - Actively participate in Agile ceremonies and meet sprint commitments.\n    - Contribute to Proof of Concepts (PoCs) and learning initiatives when required.\n    - Seek feedback, continuously learn, and adopt modern development and cloud practices.\n    - 6 months to 1 year of overall career experience into Software Engineering in Java Full Stack"
   }
  ],
- "updated": "2026-10-25 23:35"
+ "updated": "2026-10-26 00:23"
 }
