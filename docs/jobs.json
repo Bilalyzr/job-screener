@@ -293,7 +293,21 @@
    "last_seen": "2026-10-27",
    "priority": true,
    "reqs": "    - requirements and solution designs, with guidance from senior engineers.\n    - Participate in development within a CI/CD-enabled environment (e.g., PCF or similar cloud platforms).\n    - Work with data persistence technologies (RDBMS, NoSQL such as Cassandra) under guidance.\n    - Follow established coding standards, testing practices, and quality gates.\n    - Debug issues and contribute to defect resolution and system stability.\n    - Collaborate with cross-functional teams to support smooth project delivery.\n    - Actively participate in Agile ceremonies and meet sprint commitments.\n    - Contribute to Proof of Concepts (PoCs) and learning initiatives when required.\n    - Seek feedback, continuously learn, and adopt modern development and cloud practices.\n    - 6 months to 1 year of overall career experience into Software Engineering in Java Full Stack"
+  },
+  {
+   "key": "gh:8130876",
+   "company": "Stripe",
+   "title": "Software Engineer, New Grad",
+   "location": "Bangalore",
+   "url": "https://stripe.com/jobs/search?gh_jid=8130876",
+   "posted": "2026-10-28",
+   "track": "swe",
+   "tier": "fresher",
+   "first_seen": "2026-10-28",
+   "last_seen": "2026-10-28",
+   "priority": true,
+   "reqs": "    - A Bachelor’s or Master’s degree in computer science or a directly related field, obtained by summer 2027, or equivalent work experience; New grad candidates should have no more than 18 months of professional experience (excluding internship experience).\n    - Experience and familiarity with programming, either through side projects or classwork. We work mostly in Java, Ruby, JavaScript, Scala, and Go. We believe new programming languages can be learned if the fundamentals and general knowledge are present.\n    - Experience from either previous internships or working collaboratively on multi-person coding projects (in a university or professional setting).\n    - Ability to learn unfamiliar systems and form an understanding of those systems, through independent research and working with a mentor or subject matter experts.\n    - Clear written communication skills, with the ability to "
   }
  ],
- "updated": "2026-10-28 06:17"
+ "updated": "2026-10-28 09:39"
 }
