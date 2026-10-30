@@ -307,7 +307,21 @@
    "last_seen": "2026-10-30",
    "priority": true,
    "reqs": "    - A Bachelor’s or Master’s degree in computer science or a directly related field, obtained by summer 2027, or equivalent work experience; New grad candidates should have no more than 18 months of professional experience (excluding internship experience).\n    - Experience and familiarity with programming, either through side projects or classwork. We work mostly in Java, Ruby, JavaScript, Scala, and Go. We believe new programming languages can be learned if the fundamentals and general knowledge are present.\n    - Experience from either previous internships or working collaboratively on multi-person coding projects (in a university or professional setting).\n    - Ability to learn unfamiliar systems and form an understanding of those systems, through independent research and working with a mentor or subject matter experts.\n    - Clear written communication skills, with the ability to "
+  },
+  {
+   "key": "gh:8161018",
+   "company": "Rubrik",
+   "title": "Database Reliability Engineer/Database Engineer (Rubrik Security Cloud Platform)",
+   "location": "Bengaluru",
+   "url": "https://www.rubrik.com/company/careers/departments/job.8161018?gh_jid=8161018",
+   "posted": "2026-09-01",
+   "track": "cyber",
+   "tier": "watch",
+   "first_seen": "2026-10-30",
+   "last_seen": "2026-10-30",
+   "priority": false,
+   "reqs": "    - skills and qualifications\n    - Hands-on administration and performance tuning of ClickHouse (cluster topologies, ZooKeeper/Keeper coordination, MergeTree engine family, mutations, and compaction).\n    - Experience with change data capture (CDC) pipelines (e.g., Debezium, Kafka) feeding transactional updates into ClickHouse/Iceberg.\n    - Experience managing lakehouse storage patterns using Apache Iceberg (metadata management, snapshot expiration, file compaction/orphan cleanup).\n    - Experience with automated schema migration tools (e.g., gh-ost, Liquibase, Bytebase).\n    - Familiarity with distributed consensus engines ( ClickHouse Keeper,Raft, Paxos).\n    - Join Us in Securing and Accelerating the World's AI Transformation\n    - Linkedin | X (formerly Twitter) | Instagram |&nbsp; Rubrik.com\n    - At Rubrik, we are dedicated to fostering a culture where people from all backgroun"
   }
  ],
- "updated": "2026-10-30 02:58"
+ "updated": "2026-10-30 05:53"
 }
