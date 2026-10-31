@@ -323,5 +323,5 @@
    "reqs": "    - skills and qualifications\n    - Hands-on administration and performance tuning of ClickHouse (cluster topologies, ZooKeeper/Keeper coordination, MergeTree engine family, mutations, and compaction).\n    - Experience with change data capture (CDC) pipelines (e.g., Debezium, Kafka) feeding transactional updates into ClickHouse/Iceberg.\n    - Experience managing lakehouse storage patterns using Apache Iceberg (metadata management, snapshot expiration, file compaction/orphan cleanup).\n    - Experience with automated schema migration tools (e.g., gh-ost, Liquibase, Bytebase).\n    - Familiarity with distributed consensus engines ( ClickHouse Keeper,Raft, Paxos).\n    - Join Us in Securing and Accelerating the World's AI Transformation\n    - Linkedin | X (formerly Twitter) | Instagram |&nbsp; Rubrik.com\n    - At Rubrik, we are dedicated to fostering a culture where people from all backgroun"
   }
  ],
- "updated": "2026-10-31 05:47"
+ "updated": "2026-10-31 06:17"
 }
