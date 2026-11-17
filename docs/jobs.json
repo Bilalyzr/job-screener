@@ -377,7 +377,21 @@
    "last_seen": "2026-11-17",
    "priority": false,
    "reqs": "    - Strong hands-on programming skills in Golang .\n    - Deep, practical knowledge of identity protocols: OIDC/OAuth 2.0 and SAML 2.0 — including token/assertion internals, standard flows, and failure modes.\n    - Working knowledge of Active Directory .\n    - Applied cryptography/PKI experience: X.509, JWT/JWKS, key rotation, TLS .\n    - Strong security engineering discipline — comfortable reasoning about threat models and building software to protect mission-critical systems, not just make features work.\n    - Solid understanding of OS fundamentals, networking, and concurrency.\n    - Working knowledge of Linux; comfortable writing shell/bash scripts.\n    - Simple, effective written and verbal communication.\n    - Directory internals (schema, bind operations).\n    - HTTP internals and reverse proxying (TLS, header injection)."
+  },
+  {
+   "key": "ph:R-294428",
+   "company": "Mastercard",
+   "title": "Software Engineer I",
+   "location": "Pune, India",
+   "url": "https://careers.mastercard.com/us/en/job/R-294428/Software-Engineer-I",
+   "posted": "2026-11-17",
+   "track": "swe",
+   "tier": "fresher",
+   "first_seen": "2026-11-17",
+   "last_seen": "2026-11-17",
+   "priority": true,
+   "reqs": "    - Passionate about technology with Full Stack Developer skills/talent\n    - In depth knowledge on product development\n    - Strong expertise in Java and Spring Boot. Experience working on Event Driven Architecture would be an advantage.\n    - Experience in Online / Real Time Systems development\n    - Experience in CI and CD\n    - Experience in PCF (Pivotal Cloud Foundry) and Digital Native Architecture is desirable\n    - Quick grasping and learning abilities\n    - Technical Mentoring Skills"
   }
  ],
- "updated": "2026-11-17 08:28"
+ "updated": "2026-11-17 11:50"
 }
