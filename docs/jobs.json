@@ -379,5 +379,5 @@
    "reqs": "    - Strong hands-on programming skills in Golang .\n    - Deep, practical knowledge of identity protocols: OIDC/OAuth 2.0 and SAML 2.0 — including token/assertion internals, standard flows, and failure modes.\n    - Working knowledge of Active Directory .\n    - Applied cryptography/PKI experience: X.509, JWT/JWKS, key rotation, TLS .\n    - Strong security engineering discipline — comfortable reasoning about threat models and building software to protect mission-critical systems, not just make features work.\n    - Solid understanding of OS fundamentals, networking, and concurrency.\n    - Working knowledge of Linux; comfortable writing shell/bash scripts.\n    - Simple, effective written and verbal communication.\n    - Directory internals (schema, bind operations).\n    - HTTP internals and reverse proxying (TLS, header injection)."
   }
  ],
- "updated": "2026-11-17 04:47"
+ "updated": "2026-11-17 05:03"
 }
