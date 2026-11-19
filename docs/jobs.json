@@ -304,7 +304,7 @@
    "track": "swe",
    "tier": "fresher",
    "first_seen": "2026-10-28",
-   "last_seen": "2026-11-13",
+   "last_seen": "2026-11-19",
    "priority": true,
    "reqs": "    - A Bachelor’s or Master’s degree in computer science or a directly related field, obtained by summer 2027, or equivalent work experience; New grad candidates should have no more than 18 months of professional experience (excluding internship experience).\n    - Experience and familiarity with programming, either through side projects or classwork. We work mostly in Java, Ruby, JavaScript, Scala, and Go. We believe new programming languages can be learned if the fundamentals and general knowledge are present.\n    - Experience from either previous internships or working collaboratively on multi-person coding projects (in a university or professional setting).\n    - Ability to learn unfamiliar systems and form an understanding of those systems, through independent research and working with a mentor or subject matter experts.\n    - Clear written communication skills, with the ability to "
   },
@@ -393,5 +393,5 @@
    "reqs": "    - Passionate about technology with Full Stack Developer skills/talent\n    - In depth knowledge on product development\n    - Strong expertise in Java and Spring Boot. Experience working on Event Driven Architecture would be an advantage.\n    - Experience in Online / Real Time Systems development\n    - Experience in CI and CD\n    - Experience in PCF (Pivotal Cloud Foundry) and Digital Native Architecture is desirable\n    - Quick grasping and learning abilities\n    - Technical Mentoring Skills"
   }
  ],
- "updated": "2026-11-19 04:31"
+ "updated": "2026-11-19 07:29"
 }
