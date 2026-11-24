@@ -8,16 +8,18 @@ extracts the key requirements from each posting, and emails you a daily report.
 
 `job_screener.py` (Python 3, **stdlib only — no pip installs**):
 
-1. **Scans 14 sources in parallel**
+1. **Scans 16 sources in parallel**
    - 13 Greenhouse job boards: Stripe, Cloudflare, Elastic, Twilio, Dropbox,
      Discord, Netskope, Okta, PagerDuty, Zscaler, Datadog, ZoomInfo, Rubrik
    - Mastercard's Phenom careers site (via sitemap + JSON-LD `JobPosting` blocks)
+   - Palantir's Lever board (public postings API, full descriptions included)
    - PwC global careers (recent-jobs RSS feed with full descriptions)
-2. **Filters strictly to fresher roles** — a job qualifies only if its title
+2. **Filters strictly to 0–1-year roles** — a job qualifies only if its title
    carries an explicit marker (intern / graduate / trainee / campus / new grad /
    entry-level / Engineer I / Analyst I / Associate Analyst) or the JD text
    contains entry-level language ("entry-level", "fresher", "0–2 years",
-   "currently pursuing"). Postings demanding 3+ years are hard-excluded, as are
+   "currently pursuing"). Any posting that asks for more than 1 year of
+   experience is hard-excluded ("2+ years", "1–3 years" and up), as are
    senior / level-II+ / sales roles.
 3. **India-locations only** (configurable via the `INDIA` regex).
 4. **Extracts requirements** from each matching posting (Greenhouse job API
@@ -58,6 +60,7 @@ One line in the config at the top of `job_screener.py`:
 ```python
 GREENHOUSE_BOARDS["newco"] = "NewCo"          # any Greenhouse board slug
 PHENOM_SITES["newco"] = "https://careers.newco.com/us/en"
+LEVER_SITES["newco"] = "NewCo"                # any Lever board slug (jobs.lever.co/<slug>)
 ```
 
 ## Scheduling

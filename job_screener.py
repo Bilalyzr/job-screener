@@ -5,6 +5,7 @@ Fresher SWE + Cyber Security job screener for product-based companies (India-fir
 Sources:
   - Greenhouse public job boards (config below)
   - Phenom career sites via sitemap + JSON-LD (Mastercard)
+  - Lever boards via the public postings API (Palantir)
 
 Output:
   - daily-reports/YYYY-MM-DD.md  (also mirrored to daily-reports/latest.md)
@@ -41,6 +42,9 @@ GREENHOUSE_BOARDS = {
 PHENOM_SITES = {
     "mastercard": "https://careers.mastercard.com/us/en",
 }
+LEVER_SITES = {
+    "palantir": "Palantir",
+}
 # top product-based targets: their roles sort first in mail + UI
 PRIORITY_COMPANIES = {"mastercard", "stripe", "visa", "paypal"}
 DOCS = ROOT / "docs"
@@ -59,9 +63,20 @@ ENTRY_DESC = re.compile(
     r"(entry[ -]level|fresher|recent graduate|new graduate|"
     r"0\s*[-\u2013to]+\s*[12]\s+years?|currently\s+(pursuing|enrolled)|"
     r"final year|penultimate)", re.I)
-SENIOR_YEARS = re.compile(
-    r"(([3-9]|1\d)\s*[-\u2013to ]*\s*\d*\s*\+?\s*years?[^.\n]{0,50}experience|"
-    r"experience[^.\n]{0,50}([3-9]|1\d)\s*[-\u2013to ]*\s*\d*\s*\+?\s*years?)", re.I)
+# strict 0-1: a role asking for more than this many years of experience is out
+MAX_YEARS = 1
+_NUM = (r"(?:\d{1,2}|one|two|three|four|five|six|seven|eight|nine|ten|"
+        r"eleven|twelve)")
+_NUM_WORDS = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6,
+              "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11,
+              "twelve": 12}
+# "<low>[-high][+] years" — "0-2 years" is entry-level, "1-3 years" is not
+YEARS_SPAN = re.compile(
+    rf"(?<![\w.\-])({_NUM})(?:\s*\(\s*\d{{1,2}}\s*\))?(?:\s+or\s+more)?\s*(?:\+|plus)?\s*"
+    rf"(?:(?:[-\u2013]|to)\s*({_NUM})\s*(?:\+|plus)?\s*)?(?:years?|yrs?)\b", re.I)
+# "within the last 2 years", "less than 2 years": a time window, not a requirement
+NOT_A_REQUIREMENT = re.compile(
+    r"(?:\b(?:last|past|previous|recent)\s+|\bless\s+than\s+|\bunder\s+)$", re.I)
 TECH = re.compile(r"(software|sde|swe|backend|frontend|full.?stack|developer|platform|"
                   r"devops|site reliability|sre|data engineer|qa|sdet|test automation|"
                   r"security|cyber|\bsoc\b|appsec|devsecops|grc|vulnerab|threat|"
@@ -153,6 +168,31 @@ def greenhouse_detail(board, job):
     except Exception:
         job["desc"] = ""
     return job
+
+
+# --------------------------------------------------------------- lever -------
+def fetch_lever(site, company):
+    """Lever public postings API: one request, full JD text included.
+    Requirement sections go first so the mail's excerpt starts with them."""
+    data = json.loads(fetch(f"https://api.lever.co/v0/postings/{site}?mode=json"))
+    out = []
+    for p in data:
+        cats = p.get("categories") or {}
+        parts = [strip_html(l.get("content", "")) for l in p.get("lists", [])]
+        parts += [p.get("descriptionBodyPlain", ""), p.get("descriptionPlain", ""),
+                  p.get("openingPlain", ""), p.get("additionalPlain", "")]
+        created = p.get("createdAt")
+        out.append({
+            "key": f"lv:{p['id']}",
+            "company": company,
+            "title": p.get("text", ""),
+            "location": cats.get("location", ""),
+            "url": p.get("hostedUrl", ""),
+            "posted": (datetime.fromtimestamp(created / 1000).date().isoformat()
+                       if isinstance(created, (int, float)) else ""),
+            "desc": "\n".join(x for x in parts if x),
+        })
+    return out
 
 
 # ------------------------------------------------------------ phenom -------
@@ -543,6 +583,7 @@ def update_db(db, matched, watch, today, state=None):
 def monitored_companies():
     names = set(GREENHOUSE_BOARDS.values())
     names |= {n.title() for n in PHENOM_SITES}
+    names |= set(LEVER_SITES.values())
     names.add("PwC")
     return sorted(names)
 
@@ -626,9 +667,25 @@ def is_fresher(job):
     return False
 
 
-def wants_senior_years(job):
-    desc = job.get("desc") or ""
-    return bool(desc) and bool(SENIOR_YEARS.search(desc[:6000]))
+def wants_experience(job):
+    """True when the JD asks for more than MAX_YEARS of experience. A range is
+    read by its bounds: '0-2 years' is entry-level, '1-3 years' is not."""
+    desc = (job.get("desc") or "")[:6000]
+    for m in YEARS_SPAN.finditer(desc):
+        raw_before = desc[max(0, m.start() - 60):m.start()]
+        raw_after = desc[m.end():m.end() + 60]
+        context = (re.split(r"[.;\n]", raw_after)[0] + " " +
+                   re.split(r"[.;\n]", raw_before)[-1])
+        if not re.search(r"experien|\bexp\b", context, re.I):
+            continue
+        if NOT_A_REQUIREMENT.search(raw_before):
+            continue
+        low, high = m.group(1), m.group(2)
+        low = int(low) if low.isdigit() else _NUM_WORDS[low.lower()]
+        high = (int(high) if high.isdigit() else _NUM_WORDS[high.lower()]) if high else low
+        if high > MAX_YEARS and low > 0:
+            return True
+    return False
 
 
 def base_match(job):
@@ -641,7 +698,7 @@ def base_match(job):
 
 
 def is_match(job):
-    return base_match(job) and is_fresher(job) and not wants_senior_years(job)
+    return base_match(job) and is_fresher(job) and not wants_experience(job)
 
 
 def main():
@@ -658,6 +715,16 @@ def main():
                 all_jobs += fu.result()
             except Exception as e:
                 errors.append(f"greenhouse/{b}: {e}")
+
+    with ThreadPoolExecutor(max_workers=6) as ex:
+        futs = {ex.submit(fetch_lever, site, c): (site, c)
+                for site, c in LEVER_SITES.items()}
+        for fu in as_completed(futs):
+            site, c = futs[fu]
+            try:
+                all_jobs += fu.result()
+            except Exception as e:
+                errors.append(f"lever/{site}: {e}")
 
     for name, base in PHENOM_SITES.items():
         try:
@@ -683,12 +750,13 @@ def main():
         for fu in as_completed(gh_detail_futs):
             fu.result()
 
-    # drop roles whose full JD turns out to demand 3+ years experience
-    matched = [j for j in matched if not wants_senior_years(j)]
+    # drop roles whose full JD turns out to ask for more than MAX_YEARS
+    matched = [j for j in matched if not wants_experience(j)]
 
     # watch tier: India tech roles without an explicit fresher marker.
-    # Logged in the UI (never mailed); the JD check drops 3+ yrs demands and
-    # can promote genuinely entry-level JDs into the fresher (mailed) tier.
+    # Logged in the UI (never mailed); the JD check drops roles asking for
+    # more than MAX_YEARS and can promote genuinely entry-level JDs into the
+    # fresher (mailed) tier.
     watch = [j for j in all_jobs
              if j.get("title") and base_match(j) and not is_fresher(j)
              and j["key"] not in {m["key"] for m in matched}]
@@ -701,7 +769,7 @@ def main():
             f.result()
     promoted, kept = [], []
     for j in watch:
-        if wants_senior_years(j):
+        if wants_experience(j):
             continue
         (promoted if is_fresher(j) else kept).append(j)
     matched += promoted
@@ -763,7 +831,7 @@ def main():
     rep = [f"# 🎯 Fresher SWE & Cyber Security Jobs — Daily Report",
            f"**Date:** {today}   |  **Generated:** {now}",
            f"**Sources:** {len(GREENHOUSE_BOARDS)} Greenhouse boards + "
-           f"{len(PHENOM_SITES)} Phenom sites  |  "
+           f"{len(PHENOM_SITES)} Phenom sites + {len(LEVER_SITES)} Lever boards  |  "
            f"**Total postings scanned:** {len(all_jobs)}  |  "
            f"**India fresher-tech matches:** {len(matched)} "
            f"({len(new_cyber)+len(new_swe)+len(new_other)} new)\n"]
