@@ -296,7 +296,7 @@ input:hover,select:hover{border-color:var(--line-hi)}
 :focus-visible{outline:2px solid var(--primary);outline-offset:2px}
 .check{display:flex;align-items:center;gap:var(--sp-2);min-height:44px;padding:0 var(--sp-2);font-size:var(--fs-14);color:var(--muted);cursor:pointer;border-radius:var(--rad-s)}
 .check:hover{color:var(--text)}
-.check input{min-width:16px;min-height:16px;accent-color:var(--primary)}
+.check input{min-width:16px;min-height:16px;width:16px;accent-color:var(--primary)}
 .result-line{font-size:var(--fs-12);color:var(--muted);margin:0 0 var(--sp-3)}
 .jobs{display:grid;gap:var(--sp-3)}
 .job{background:var(--surface);border:1px solid var(--line);border-radius:var(--rad);padding:var(--sp-4);transition:border-color .15s,box-shadow .15s}
