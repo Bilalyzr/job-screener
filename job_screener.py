@@ -368,6 +368,7 @@ footer a{color:var(--primary)}
   </select>
   <select id="cmp" aria-label="Filter by company"><option value="">All companies</option></select>
   <label class="check"><input type="checkbox" id="newonly"> New today only</label>
+  <label class="check" title="Only roles the latest daily scan still found, newest first"><input type="checkbox" id="latest"> Latest jobs</label>
   <label class="check"><input type="checkbox" id="pri" checked> ⭐ Priority first</label>
 </form>
 <p class="result-line" id="count"></p>
@@ -401,17 +402,22 @@ function stats(){
                         ["Watch",n.watch],["Cyber",n.cyber],["Internships",n.intern]]
     .map(([k,v,hl])=>`<div class="stat ${hl||""}"><b>${v}</b><span>${k}</span></div>`).join("");
 }
+const LAST_SCAN=JOBS.reduce((m,j)=>(j.last_seen||"")>m?j.last_seen:m,"");
 function render(){
   const q=$("q").value.toLowerCase(),trk=$("trk").value,cmp=$("cmp").value,
-        no=$("newonly").checked,tier=$("tier").value;
+        no=$("newonly").checked,tier=$("tier").value,lat=$("latest").checked;
   let js=JOBS.filter(j=>(!trk||j.track===trk)&&(!cmp||j.company===cmp)&&
         (!tier||j.tier===tier)&&(!no||j.first_seen===TODAY)&&
+        (!lat||j.last_seen===LAST_SCAN)&&
         (!q||(j.title+j.company+j.location).toLowerCase().includes(q)));
   js.sort((a,b)=>{
+    if(lat&&(b.first_seen||"")!==(a.first_seen||""))
+      return (b.first_seen||"").localeCompare(a.first_seen||"");
     if($("pri").checked&&!!b.priority!=!!a.priority)return a.priority?-1:1;
     if((a.tier==="watch")!==(b.tier==="watch"))return a.tier==="watch"?1:-1;
     return (b.first_seen||"").localeCompare(a.first_seen||"")||a.company.localeCompare(b.company);});
-  $("count").textContent=`Showing ${js.length} of ${JOBS.length} tracked roles`;
+  $("count").textContent=`Showing ${js.length} of ${JOBS.length} tracked roles`+
+    (lat?` — latest scan ${LAST_SCAN}, newest first`:"");
   $("list").innerHTML=js.length?js.map(j=>`
    <article class="job ${j.priority?"pri":""}">
     <div class="top">
@@ -432,11 +438,12 @@ function render(){
      <button class="btn ghost" id="reset" type="button">Reset filters</button></div>`;
   const r=$("reset");
   if(r)r.onclick=()=>{$("q").value="";$("trk").value="";$("tier").value="";
-    $("cmp").value="";$("newonly").checked=false;render();};
+    $("cmp").value="";$("newonly").checked=$("latest").checked=false;render();};
   stats();
   sources();
   const ctx=[cmp?`company: ${cmp}`:"",trk?`track: ${trk}`:"",
-             tier?`level: ${tier}`:"",no?"new today only":""]
+             tier?`level: ${tier}`:"",no?"new today only":"",
+             lat?"latest scan":""]
     .filter(Boolean).join(" · ");
   buildRadar(js,ctx);
 }
@@ -478,7 +485,7 @@ function buildRadar(js,ctx){
   });
   $("radar").innerHTML=h;
 }
-["q","trk","tier","cmp","newonly","pri"].forEach(id=>$(id).addEventListener("input",render));
+["q","trk","tier","cmp","newonly","latest","pri"].forEach(id=>$(id).addEventListener("input",render));
 $("srcs").addEventListener("click",e=>{
   const b=e.target.closest(".src");if(!b)return;
   $("cmp").value=$("cmp").value===b.dataset.c?"":b.dataset.c;
@@ -500,8 +507,14 @@ def load_db():
     return {"jobs": []}
 
 
-def update_db(db, matched, watch, today):
+def update_db(db, matched, watch, today, state=None):
     by_key = {j["key"]: j for j in db["jobs"]}
+    # the state file starts a fresh 'first' when a role is re-listed after its
+    # old entry expired (30 days) — keep the log's recency in step with it
+    for k, rec in by_key.items():
+        st = (state or {}).get(k)
+        if isinstance(st, dict) and st.get("first", "") > rec.get("first_seen", ""):
+            rec["first_seen"] = st["first"]
     for tier, jobs in (("fresher", matched), ("watch", watch)):
         for j in jobs:
             pri = j["company"].lower() in PRIORITY_COMPANIES
@@ -779,7 +792,7 @@ def main():
 
     # ---- UI: cumulative job log (docs/index.html) — every mailed job lands here
     try:
-        db = update_db(load_db(), matched, watch, today)
+        db = update_db(load_db(), matched, watch, today, state)
         idx = write_site(db, today)
         print(f"[screener] ui: {idx} (fresher={len(matched)} watch={len(watch)})")
     except Exception as e:

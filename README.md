@@ -34,7 +34,9 @@ extracts the key requirements from each posting, and emails you a daily report.
    and/or first 4000 chars via Telegram Bot API.
 9. **Updates the web UI** (`docs/index.html`) — a cumulative, searchable log of
    every job ever mailed, with stats, filters (track / company / new-today /
-   search) and product-company priority sorting. Optionally auto-commits and
+   search / latest-scan) and product-company priority sorting. **Latest jobs**
+   shows only the roles the most recent scan still found, newest first.
+   Optionally auto-commits and
    pushes `docs/` to GitHub (`site.push` in `mailer.json`) so it can be served
    as a GitHub Pages site.
 
