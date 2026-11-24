@@ -417,7 +417,7 @@ function render(){
     if((a.tier==="watch")!==(b.tier==="watch"))return a.tier==="watch"?1:-1;
     return (b.first_seen||"").localeCompare(a.first_seen||"")||a.company.localeCompare(b.company);});
   $("count").textContent=`Showing ${js.length} of ${JOBS.length} tracked roles`+
-    (lat?` — latest scan ${LAST_SCAN}, newest first`:"");
+    (lat?` — latest scan ${LAST_SCAN.slice(0,16)}, newest first`:"");
   $("list").innerHTML=js.length?js.map(j=>`
    <article class="job ${j.priority?"pri":""}">
     <div class="top">
@@ -509,6 +509,9 @@ def load_db():
 
 def update_db(db, matched, watch, today, state=None):
     by_key = {j["key"]: j for j in db["jobs"]}
+    # one timestamp per run: a role's last_seen is the scan that saw it, so the
+    # UI's "Latest jobs" is exactly the latest scan
+    stamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     # the state file starts a fresh 'first' when a role is re-listed after its
     # old entry expired (30 days) — keep the log's recency in step with it
     for k, rec in by_key.items():
@@ -520,7 +523,7 @@ def update_db(db, matched, watch, today, state=None):
             pri = j["company"].lower() in PRIORITY_COMPANIES
             rec = by_key.get(j["key"])
             if rec:
-                rec.update(last_seen=today, title=j["title"], location=j["location"],
+                rec.update(last_seen=stamp, title=j["title"], location=j["location"],
                            url=j["url"], posted=j["posted"], track=j["track"],
                            priority=pri, tier=tier)
             else:
@@ -528,12 +531,12 @@ def update_db(db, matched, watch, today, state=None):
                     "key": j["key"], "company": j["company"], "title": j["title"],
                     "location": j["location"], "url": j["url"], "posted": j["posted"],
                     "track": j["track"], "tier": tier,
-                    "first_seen": today, "last_seen": today,
+                    "first_seen": today, "last_seen": stamp,
                     "priority": pri,
                     "reqs": extract_requirements(j.get("desc", "")) if j.get("desc") else "",
                 }
     db["jobs"] = list(by_key.values())
-    db["updated"] = datetime.now().strftime("%Y-%m-%d %H:%M")
+    db["updated"] = stamp[:16]
     return db
 
 
