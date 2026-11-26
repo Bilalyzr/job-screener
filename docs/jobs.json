@@ -51,7 +51,7 @@
    "posted": "2026-09-06",
    "track": "swe",
    "first_seen": "2026-09-22",
-   "last_seen": "2026-11-26 04:59:59",
+   "last_seen": "2026-11-26 05:28:41",
    "priority": false,
    "reqs": "    - Interns are self-starters, driven, and can manage themselves.&nbsp; Bottom line, if you have a limitless drive and like to win, we want to talk to you - come make history!&nbsp;\n    - Bachelor’s or Master’s degree, preferably in Computer Science\n    - Proficiency in one or more general-purpose object-oriented programming languages like Java, C/C++, Scala, Python\n    - Minimum eligibility criteria\n    - 2027 graduates of Circuital branches only\n    - Available from January 2027 to May 2027 in Pune for the onsite internship (No remote options)\n    - Join Us in Securing and Accelerating the World's AI Transformation\n    - Linkedin | X (formerly Twitter) | Instagram |&nbsp; Rubrik.com\n    - At Rubrik, we are dedicated to fostering a culture where people from all backgrounds are valued, feel they belong, and believe they can succeed. Our commitment to inclusion is at the heart of our mi",
    "tier": "fresher"
@@ -80,7 +80,7 @@
    "track": "swe",
    "tier": "watch",
    "first_seen": "2026-09-22",
-   "last_seen": "2026-11-26 04:59:59",
+   "last_seen": "2026-11-26 05:28:41",
    "priority": false,
    "reqs": "    - Strong hands-on programming skills in Golang .\n    - Deep, practical knowledge of identity protocols: OIDC/OAuth 2.0 and SAML 2.0 — including token/assertion internals, standard flows, and failure modes.\n    - Working knowledge of Active Directory .\n    - Applied cryptography/PKI experience: X.509, JWT/JWKS, key rotation, TLS .\n    - Strong security engineering discipline — comfortable reasoning about threat models and building software to protect mission-critical systems, not just make features work.\n    - Solid understanding of OS fundamentals, networking, and concurrency.\n    - Working knowledge of Linux; comfortable writing shell/bash scripts.\n    - Simple, effective written and verbal communication.\n    - Directory internals (schema, bind operations).\n    - HTTP internals and reverse proxying (TLS, header injection)."
   },
@@ -276,7 +276,7 @@
    "track": "swe",
    "tier": "watch",
    "first_seen": "2026-10-21",
-   "last_seen": "2026-11-26 04:59:59",
+   "last_seen": "2026-11-26 05:28:41",
    "priority": false,
    "reqs": "    - qualifications you’ll need\n    - Rubrik Software Engineers are self-starters, driven, and can manage themselves. Bottom line,if you have a limitless drive and like to win, we want to talk to you - come make history!\n    - Bachelor’s or Master’s degree or equivalent in computer science or related field\n    - 6 months - 1 year of relevant work experience\n    - Proficiency in one or more general purpose programming languages like Java, C/C++, Scala, Python, C#. Having prior experience with C++ would be a plus.&nbsp;\n    - Experience with Google Cloud Platform/AWS/Azure or other public cloud technologies is a plus\n    - Experience working with two or more from the following: Unix/Linux environments, Windows environments, distributed systems, networking, developing large software systems, file systems, storage systems, hypervisors, databases and/or security software development.\n    - K"
   },
@@ -318,7 +318,7 @@
    "track": "cyber",
    "tier": "watch",
    "first_seen": "2026-10-30",
-   "last_seen": "2026-11-26 04:59:59",
+   "last_seen": "2026-11-26 05:28:41",
    "priority": false,
    "reqs": "    - skills and qualifications\n    - Hands-on administration and performance tuning of ClickHouse (cluster topologies, ZooKeeper/Keeper coordination, MergeTree engine family, mutations, and compaction).\n    - Experience with change data capture (CDC) pipelines (e.g., Debezium, Kafka) feeding transactional updates into ClickHouse/Iceberg.\n    - Experience managing lakehouse storage patterns using Apache Iceberg (metadata management, snapshot expiration, file compaction/orphan cleanup).\n    - Experience with automated schema migration tools (e.g., gh-ost, Liquibase, Bytebase).\n    - Familiarity with distributed consensus engines ( ClickHouse Keeper,Raft, Paxos).\n    - Join Us in Securing and Accelerating the World's AI Transformation\n    - Linkedin | X (formerly Twitter) | Instagram |&nbsp; Rubrik.com\n    - At Rubrik, we are dedicated to fostering a culture where people from all backgroun"
   },
@@ -374,7 +374,7 @@
    "track": "swe",
    "tier": "watch",
    "first_seen": "2026-11-17",
-   "last_seen": "2026-11-26 04:59:59",
+   "last_seen": "2026-11-26 05:28:41",
    "priority": false,
    "reqs": "    - Strong hands-on programming skills in Golang .\n    - Deep, practical knowledge of identity protocols: OIDC/OAuth 2.0 and SAML 2.0 — including token/assertion internals, standard flows, and failure modes.\n    - Working knowledge of Active Directory .\n    - Applied cryptography/PKI experience: X.509, JWT/JWKS, key rotation, TLS .\n    - Strong security engineering discipline — comfortable reasoning about threat models and building software to protect mission-critical systems, not just make features work.\n    - Solid understanding of OS fundamentals, networking, and concurrency.\n    - Working knowledge of Linux; comfortable writing shell/bash scripts.\n    - Simple, effective written and verbal communication.\n    - Directory internals (schema, bind operations).\n    - HTTP internals and reverse proxying (TLS, header injection)."
   },
@@ -393,5 +393,5 @@
    "reqs": "    - Passionate about technology with Full Stack Developer skills/talent\n    - In depth knowledge on product development\n    - Strong expertise in Java and Spring Boot. Experience working on Event Driven Architecture would be an advantage.\n    - Experience in Online / Real Time Systems development\n    - Experience in CI and CD\n    - Experience in PCF (Pivotal Cloud Foundry) and Digital Native Architecture is desirable\n    - Quick grasping and learning abilities\n    - Technical Mentoring Skills"
   }
  ],
- "updated": "2026-11-26 04:59"
+ "updated": "2026-11-26 05:28"
 }
